@@ -51,6 +51,30 @@ CColorPickerApp theApp;
 
 BOOL CColorPickerApp::InitInstance()
 {
+	//替换掉对话框程序的默认类名
+	WNDCLASS wc;
+	::GetClassInfo(AfxGetInstanceHandle(), _T("#32770"), &wc);	//MFC默认的所有对话框的类名为#32770
+	wc.lpszClassName = _T("ColorPicker-2rW332K9");	//将对话框的类名修改为新类名
+	AfxRegisterClass(&wc);
+
+	//检查是否已有实例正在运行（Debug时不检查）
+#ifndef _DEBUG
+	HANDLE hMutex = ::CreateMutex(NULL, TRUE, _T("c1A0pd1NE1v7"));		//使用一个随机的字符串创建一个互斥量
+	if (hMutex != NULL)
+	{
+		if (GetLastError() == ERROR_ALREADY_EXISTS)		//互斥量创建失败，说明已经有一个程序的实例正在运行
+		{
+			HWND handle = FindWindow(_T("ColorPicker-2rW332K9"), NULL);		//根据类名查找已运行实例窗口的句柄
+			if (handle != NULL)
+			{
+				ShowWindow(handle, SW_SHOWNORMAL);		//显示正在运行的窗口
+				SetForegroundWindow(handle);
+				return FALSE;		//退出当前程序
+			}
+		}
+	}
+#endif
+
 	//获取当前程序路径
 	wchar_t buff[MAX_PATH];
 	GetModuleFileNameW(NULL, buff, MAX_PATH);
