@@ -16,7 +16,7 @@
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
-class CAboutDlg : public CDialogEx
+class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
@@ -34,16 +34,16 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
+CAboutDlg::CAboutDlg() : CDialog(IDD_ABOUTBOX)
 {
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
 
 
@@ -52,14 +52,14 @@ END_MESSAGE_MAP()
 
 
 CColorPickerDlg::CColorPickerDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_COLORPICKER_DIALOG, pParent)
+	: CDialog(IDD_COLORPICKER_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COLOR_VALUE, m_edit);
 	DDX_Control(pDX, IDC_COLOR_R, m_edit_r);
 	DDX_Control(pDX, IDC_COLOR_G, m_edit_g);
@@ -71,7 +71,7 @@ void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COLOR_STATIC, m_color_static);
 }
 
-BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -176,7 +176,7 @@ void CColorPickerDlg::LoadConfig()
 
 BOOL CColorPickerDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CDialog::OnInitDialog();
 
 	// 将“关于...”菜单项添加到系统菜单中。
 
@@ -236,7 +236,7 @@ void CColorPickerDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 	else
 	{
-		CDialogEx::OnSysCommand(nID, lParam);
+		CDialog::OnSysCommand(nID, lParam);
 	}
 }
 
@@ -265,7 +265,7 @@ void CColorPickerDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+		CDialog::OnPaint();
 	}
 }
 
@@ -302,7 +302,7 @@ HCURSOR CColorPickerDlg::OnQueryDragIcon()
 void CColorPickerDlg::OnEnChangeColorValue()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
@@ -328,7 +328,7 @@ void CColorPickerDlg::OnEnChangeColorValue()
 void CColorPickerDlg::OnEnChangeColorR()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
@@ -350,7 +350,7 @@ void CColorPickerDlg::OnEnChangeColorR()
 void CColorPickerDlg::OnEnChangeColorG()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
@@ -372,7 +372,7 @@ void CColorPickerDlg::OnEnChangeColorG()
 void CColorPickerDlg::OnEnChangeColorB()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
@@ -394,7 +394,7 @@ void CColorPickerDlg::OnEnChangeColorB()
 void CColorPickerDlg::OnEnChangeColorHex()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
@@ -485,7 +485,7 @@ BOOL CColorPickerDlg::PreTranslateMessage(MSG* pMsg)
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
 		return TRUE;
 
-	return CDialogEx::PreTranslateMessage(pMsg);
+	return CDialog::PreTranslateMessage(pMsg);
 }
 
 
@@ -495,7 +495,7 @@ void CColorPickerDlg::OnClose()
 	m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//退出时将颜色表保存到配置文件
 	SaveConfig();
 
-	CDialogEx::OnClose();
+	CDialog::OnClose();
 }
 
 afx_msg LRESULT CColorPickerDlg::OnColorDbClicked(WPARAM wParam, LPARAM lParam)

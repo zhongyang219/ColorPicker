@@ -10,7 +10,7 @@
 
 
 // CColorPickerDlg 对话框
-class CColorPickerDlg : public CDialogEx
+class CColorPickerDlg : public CDialog
 {
 // 构造
 public:
