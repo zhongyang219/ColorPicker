@@ -29,6 +29,18 @@ CColorPickerApp::CColorPickerApp()
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
+int CColorPickerApp::DPI(int pixel)
+{
+	return m_dpi * pixel / 96;
+}
+
+void CColorPickerApp::GetDPI(CWnd * pWnd)
+{
+	CWindowDC dc(pWnd);
+	HDC hDC = dc.GetSafeHdc();
+	m_dpi = GetDeviceCaps(hDC, LOGPIXELSY);
+}
+
 
 // 唯一的一个 CColorPickerApp 对象
 
@@ -39,6 +51,14 @@ CColorPickerApp theApp;
 
 BOOL CColorPickerApp::InitInstance()
 {
+	//获取当前程序路径
+	wchar_t buff[MAX_PATH];
+	GetModuleFileNameW(NULL, buff, MAX_PATH);
+	size_t index;
+	m_modle_dir = buff;
+	index = m_modle_dir.rfind(L'\\');
+	m_modle_dir = m_modle_dir.substr(0, index + 1);
+
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。  否则，将无法创建窗口。
@@ -68,7 +88,7 @@ BOOL CColorPickerApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CColorPickerDlg dlg;
 	m_pMainWnd = &dlg;

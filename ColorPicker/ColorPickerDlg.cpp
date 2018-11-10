@@ -6,6 +6,8 @@
 #include "ColorPicker.h"
 #include "ColorPickerDlg.h"
 #include "afxdialogex.h"
+#include "ColorConvert.h"
+#include "IniHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -64,7 +66,9 @@ void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COLOR_B, m_edit_b);
 	DDX_Control(pDX, IDC_COLOR_HEX, m_edit_hex);
 	//  DDX_Control(pDX, IDC_STATIC_PREVIEW, m_preview);
-	DDX_Control(pDX, IDC_MFCCOLORBUTTON1, m_color_control);
+	//DDX_Control(pDX, IDC_MFCCOLORBUTTON1, m_color_control);
+	DDX_Control(pDX, IDC_COLOR_LIST, m_color_list);
+	DDX_Control(pDX, IDC_COLOR_STATIC, m_color_static);
 }
 
 BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialogEx)
@@ -78,31 +82,16 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_COLOR_B, &CColorPickerDlg::OnEnChangeColorB)
 	ON_EN_CHANGE(IDC_COLOR_HEX, &CColorPickerDlg::OnEnChangeColorHex)
 	ON_BN_CLICKED(IDC_ABOUT_BUTTON, &CColorPickerDlg::OnBnClickedAboutButton)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &CColorPickerDlg::OnBnClickedMfccolorbutton1)
+	//ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &CColorPickerDlg::OnBnClickedMfccolorbutton1)
+	ON_BN_CLICKED(IDC_ADD_COLOR_BUTTON, &CColorPickerDlg::OnBnClickedAddColorButton)
+	ON_BN_CLICKED(IDC_DELETE_COLOR_BUTTON, &CColorPickerDlg::OnBnClickedDeleteColorButton)
+	ON_MESSAGE(WM_STATIC_CLICKED, &CColorPickerDlg::OnStaticClicked)
+	ON_WM_CLOSE()
+	ON_MESSAGE(WM_COLOR_DB_CLICKED, &CColorPickerDlg::OnColorDbClicked)
 END_MESSAGE_MAP()
 
 
 // CColorPickerDlg 消息处理程序
-
-unsigned int CColorPickerDlg::RGB2Hex(unsigned char R, unsigned char G, unsigned char B)
-{
-	return static_cast<unsigned int>(R) << 16 | static_cast<unsigned short>(G) << 8 | B;
-}
-
-unsigned char CColorPickerDlg::Hex2R(unsigned int hex)
-{
-	return hex / 256 / 256;
-}
-
-unsigned char CColorPickerDlg::Hex2G(unsigned int hex)
-{
-	return hex / 256 % 256;;
-}
-
-unsigned char CColorPickerDlg::Hex2B(unsigned int hex)
-{
-	return hex % 256;
-}
 
 void CColorPickerDlg::SetColorRefText()
 {
@@ -151,7 +140,37 @@ void CColorPickerDlg::SetPreview()
 	//pDC->FillRect(&rect, &BGBrush);
 	//pDC->SelectObject(pOldBrush);
 	//BGBrush.DeleteObject();
-	m_color_control.SetColor(m_color);
+	//m_color_control.SetColor(m_color);
+	m_color_static.SetFillColor(m_color);
+}
+
+void CColorPickerDlg::SetColor(COLORREF color)
+{
+	m_color = color;
+	m_color_r = GetRValue(m_color);
+	m_color_g = GetGValue(m_color);
+	m_color_b = GetBValue(m_color);
+	m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
+	SetColorRefText();
+	SetColorRText();
+	SetColorGText();
+	SetColorBText();
+	SetColorHexText();
+	SetPreview();
+
+}
+
+void CColorPickerDlg::SaveConfig() const
+{
+	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
+	ini.WriteInt(L"Config", L"current_color", m_color);
+	ini.Save();
+}
+
+void CColorPickerDlg::LoadConfig()
+{
+	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
+	m_color = ini.GetInt(L"Config", L"current_color", 0);
 }
 
 
@@ -185,6 +204,9 @@ BOOL CColorPickerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	theApp.GetDPI(this);
+	LoadConfig();
+
 	SetColorRefText();
 	SetColorRText();
 	SetColorGText();
@@ -196,6 +218,11 @@ BOOL CColorPickerDlg::OnInitDialog()
 	m_edit_g.SetLimitText(3);
 	m_edit_b.SetLimitText(3);
 	m_edit_hex.SetLimitText(6);
+
+	m_color_list.SetDrawColorRow(CLC_COLOR);
+	m_color_list.LoadColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//从配置文件加载颜色表
+
+	SetColor(m_color);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -288,7 +315,7 @@ void CColorPickerDlg::OnEnChangeColorValue()
 		m_color_r = GetRValue(m_color);
 		m_color_g = GetGValue(m_color);
 		m_color_b = GetBValue(m_color);
-		m_color_hex = RGB2Hex(m_color_r, m_color_g, m_color_b);
+		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRText();
 		SetColorGText();
 		SetColorBText();
@@ -312,7 +339,7 @@ void CColorPickerDlg::OnEnChangeColorR()
 		m_edit_r.GetWindowText(str);
 		m_color_r = _wtoi(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
-		m_color_hex = RGB2Hex(m_color_r, m_color_g, m_color_b);
+		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
 		SetColorHexText();
 		SetPreview();
@@ -334,7 +361,7 @@ void CColorPickerDlg::OnEnChangeColorG()
 		m_edit_g.GetWindowText(str);
 		m_color_g = _wtoi(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
-		m_color_hex = RGB2Hex(m_color_r, m_color_g, m_color_b);
+		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
 		SetColorHexText();
 		SetPreview();
@@ -356,7 +383,7 @@ void CColorPickerDlg::OnEnChangeColorB()
 		m_edit_b.GetWindowText(str);
 		m_color_b = _wtoi(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
-		m_color_hex = RGB2Hex(m_color_r, m_color_g, m_color_b);
+		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
 		SetColorHexText();
 		SetPreview();
@@ -377,9 +404,9 @@ void CColorPickerDlg::OnEnChangeColorHex()
 		CString str;
 		m_edit_hex.GetWindowText(str);
 		m_color_hex = wcstoul(str, NULL, 16);
-		m_color_r = Hex2R(m_color_hex);
-		m_color_g = Hex2G(m_color_hex);
-		m_color_b = Hex2B(m_color_hex);
+		m_color_r = CColorConvert::Hex2R(m_color_hex);
+		m_color_g = CColorConvert::Hex2G(m_color_hex);
+		m_color_b = CColorConvert::Hex2B(m_color_hex);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
 		SetColorRText();
@@ -398,17 +425,81 @@ void CColorPickerDlg::OnBnClickedAboutButton()
 }
 
 
-void CColorPickerDlg::OnBnClickedMfccolorbutton1()
+//void CColorPickerDlg::OnBnClickedMfccolorbutton1()
+//{
+//	// TODO: 在此添加控件通知处理程序代码
+//}
+
+
+void CColorPickerDlg::OnBnClickedAddColorButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	m_color = m_color_control.GetColor();
-	m_color_r = GetRValue(m_color);
-	m_color_g = GetGValue(m_color);
-	m_color_b = GetBValue(m_color);
-	m_color_hex = RGB2Hex(m_color_r, m_color_g, m_color_b);
-	SetColorRefText();
-	SetColorRText();
-	SetColorGText();
-	SetColorBText();
-	SetColorHexText();
+	CString color_name;
+	color_name.Format(_T("颜色 #%.6x"), m_color_hex);
+	color_name.MakeUpper();
+
+	if (m_color_list.AddColor(color_name.GetString(), m_color))
+	{
+		m_color_list.Edit(m_color_list.GetColorNum() - 1);
+	}
+	else
+	{
+		CString info;
+		info.Format(_T("%s 已经存在于颜色表中！"), color_name.GetString());
+		MessageBox(info, NULL, MB_ICONWARNING | MB_OK);
+	}
+}
+
+
+void CColorPickerDlg::OnBnClickedDeleteColorButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	int row = m_color_list.GetSelectionMark();
+	if (row >= 0 && row < m_color_list.GetColorNum())
+	{
+		CString info;
+		info.Format(_T("确实要删除 “%s” 吗？"), m_color_list.GetColorName(row).c_str());
+		if(MessageBox(info, NULL, MB_ICONQUESTION | MB_YESNO)==IDYES)
+			m_color_list.DeleteColor(row);
+	}
+}
+
+
+afx_msg LRESULT CColorPickerDlg::OnStaticClicked(WPARAM wParam, LPARAM lParam)
+{
+	CMFCColorDialog dlg(m_color);
+	if (dlg.DoModal() == IDOK)
+	{
+		SetColor(dlg.GetColor());
+	}
+	return 0;
+}
+
+
+BOOL CColorPickerDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+		//屏蔽按回车键和ESC键退出
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)
+		return TRUE;
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
+		return TRUE;
+
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CColorPickerDlg::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//退出时将颜色表保存到配置文件
+	SaveConfig();
+
+	CDialogEx::OnClose();
+}
+
+afx_msg LRESULT CColorPickerDlg::OnColorDbClicked(WPARAM wParam, LPARAM lParam)
+{
+	SetColor((COLORREF)wParam);
+	return 0;
 }

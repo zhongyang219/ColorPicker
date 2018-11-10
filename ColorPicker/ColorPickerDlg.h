@@ -5,6 +5,8 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcolorbutton.h"
+#include "ColorStatic.h"
+#include "ColorListCtrl.h"
 
 
 // CColorPickerDlg 对话框
@@ -40,12 +42,9 @@ protected:
 //	CStatic m_preview;
 //颜色预览控件
 
-	CMFCColorButton m_color_control;
-
-	unsigned int RGB2Hex(unsigned char R, unsigned char G, unsigned char B);	//RGB值转换成颜色十六进制值
-	unsigned char Hex2R(unsigned int hex);	//从颜色十六进制获取RGB中的红色值
-	unsigned char Hex2G(unsigned int hex);	//从颜色十六进制获取RGB中的绿色值
-	unsigned char Hex2B(unsigned int hex);	//从颜色十六进制获取RGB中的蓝色值
+	//CMFCColorButton m_color_control;
+	CColorListCtrl m_color_list;
+	CColorStatic m_color_static;
 
 	void SetColorRefText();
 	void SetColorRText();
@@ -54,6 +53,11 @@ protected:
 	void SetColorHexText();
 
 	void SetPreview();
+
+	void SetColor(COLORREF color);
+
+	void SaveConfig() const;
+	void LoadConfig();
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
@@ -70,5 +74,14 @@ protected:
 	afx_msg void OnEnChangeColorHex();
 	afx_msg void OnBnClickedAboutButton();
 public:
-	afx_msg void OnBnClickedMfccolorbutton1();
+	//afx_msg void OnBnClickedMfccolorbutton1();
+	afx_msg void OnBnClickedAddColorButton();
+	afx_msg void OnBnClickedDeleteColorButton();
+protected:
+	afx_msg LRESULT OnStaticClicked(WPARAM wParam, LPARAM lParam);
+public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnClose();
+protected:
+	afx_msg LRESULT OnColorDbClicked(WPARAM wParam, LPARAM lParam);
 };

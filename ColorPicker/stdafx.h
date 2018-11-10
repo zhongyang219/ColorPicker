@@ -35,7 +35,7 @@
 
 
 
-
+#include <vector>
 
 
 
@@ -51,4 +51,4 @@
 #endif
 #endif
 
-
+#define CONFIG_FILE_NAME L"color_table.ini"

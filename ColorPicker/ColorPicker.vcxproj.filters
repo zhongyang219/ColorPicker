@@ -13,17 +13,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ColorPicker">
+      <UniqueIdentifier>{ac8d1e6b-20ca-42f1-9437-5761fc1fd12b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="派生的控件类">
+      <UniqueIdentifier>{67637a88-d45e-4d1d-87e5-9ae1d0dd6c17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="派生的控件类\ColorStatic">
+      <UniqueIdentifier>{16e59eb3-e395-4194-91bb-dfe1c54d6dfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共的类">
+      <UniqueIdentifier>{be6d3a25-103a-45e0-88b1-cb33f1b55871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共的类\Common">
+      <UniqueIdentifier>{2c5e5e98-6440-4620-a3e9-9f9cd17bc000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="派生的控件类\ColorListCtrl">
+      <UniqueIdentifier>{f08b94c8-4dc6-4610-b7d8-bd448d1900cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共的类\IniHelper">
+      <UniqueIdentifier>{056f9375-906f-4699-8d34-a37c0bca571e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共的类\ColorConvert">
+      <UniqueIdentifier>{49bc6d7a-c938-4a69-b166-b6339d2e5157}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ColorPicker.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorPickerDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -33,16 +51,52 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ColorPicker.h">
+      <Filter>ColorPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorPickerDlg.h">
+      <Filter>ColorPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorStatic.h">
+      <Filter>派生的控件类\ColorStatic</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorListCtrl.h">
+      <Filter>派生的控件类\ColorListCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>公共的类\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IniHelper.h">
+      <Filter>公共的类\IniHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorConvert.h">
+      <Filter>公共的类\ColorConvert</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ColorPicker.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorPickerDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorPicker.cpp">
+      <Filter>ColorPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorPickerDlg.cpp">
+      <Filter>ColorPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorStatic.cpp">
+      <Filter>派生的控件类\ColorStatic</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorListCtrl.cpp">
+      <Filter>派生的控件类\ColorListCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>公共的类\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IniHelper.cpp">
+      <Filter>公共的类\IniHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorConvert.cpp">
+      <Filter>公共的类\ColorConvert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

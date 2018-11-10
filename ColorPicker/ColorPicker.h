@@ -20,9 +20,17 @@ class CColorPickerApp : public CWinApp
 public:
 	CColorPickerApp();
 
+	int DPI(int pixel);
+	void GetDPI(CWnd* pWnd);
+	std::wstring GetModleDir() const { return m_modle_dir; }
+
 // ÷ÿ–¥
 public:
 	virtual BOOL InitInstance();
+
+private:
+	int m_dpi{ 96 };
+	std::wstring m_modle_dir;
 
 //  µœ÷
 
