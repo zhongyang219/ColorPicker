@@ -174,9 +174,9 @@ void CColorListCtrl::PreSubclassWindow()
 	SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EDITLABELS);
 
 	int width0, width1;
-	width0 = theApp.DPI(150);
 	CRect rect;
 	GetWindowRect(rect);
+	width0 = rect.Width()*4/7;
 	width1 = rect.Width() - width0 - theApp.DPI(21);
 
 	InsertColumn(CLC_NAME, _T("名称"), LVCFMT_LEFT, width0);		//插入第1列
