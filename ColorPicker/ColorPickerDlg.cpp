@@ -88,6 +88,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_MESSAGE(WM_STATIC_CLICKED, &CColorPickerDlg::OnStaticClicked)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_COLOR_DB_CLICKED, &CColorPickerDlg::OnColorDbClicked)
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -204,8 +205,12 @@ BOOL CColorPickerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	theApp.GetDPI(this);
 	LoadConfig();
+
+	//获取窗口初始大小
+	CRect rect;
+	GetWindowRect(rect);
+	m_min_size = rect.Size();
 
 	SetColorRefText();
 	SetColorRText();
@@ -502,4 +507,15 @@ afx_msg LRESULT CColorPickerDlg::OnColorDbClicked(WPARAM wParam, LPARAM lParam)
 {
 	SetColor((COLORREF)wParam);
 	return 0;
+}
+
+
+void CColorPickerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	//限制窗口最小大小
+	lpMMI->ptMinTrackSize.x = m_min_size.cx;		//设置最小宽度
+	lpMMI->ptMinTrackSize.y = m_min_size.cy;		//设置最小高度
+
+	CDialog::OnGetMinMaxInfo(lpMMI);
 }

@@ -27,18 +27,14 @@ CColorPickerApp::CColorPickerApp()
 
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+	CWindowDC dc(NULL);
+	HDC hDC = dc.GetSafeHdc();
+	m_dpi = GetDeviceCaps(hDC, LOGPIXELSY);
 }
 
 int CColorPickerApp::DPI(int pixel)
 {
 	return m_dpi * pixel / 96;
-}
-
-void CColorPickerApp::GetDPI(CWnd * pWnd)
-{
-	CWindowDC dc(pWnd);
-	HDC hDC = dc.GetSafeHdc();
-	m_dpi = GetDeviceCaps(hDC, LOGPIXELSY);
 }
 
 

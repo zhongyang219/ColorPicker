@@ -21,7 +21,6 @@ public:
 	CColorPickerApp();
 
 	int DPI(int pixel);
-	void GetDPI(CWnd* pWnd);
 	std::wstring GetModleDir() const { return m_modle_dir; }
 
 // ÖØÐ´

@@ -46,6 +46,8 @@ protected:
 	CColorListCtrl m_color_list;
 	CColorStatic m_color_static;
 
+	CSize m_min_size;
+
 	void SetColorRefText();
 	void SetColorRText();
 	void SetColorGText();
@@ -84,4 +86,6 @@ public:
 	afx_msg void OnClose();
 protected:
 	afx_msg LRESULT OnColorDbClicked(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };
