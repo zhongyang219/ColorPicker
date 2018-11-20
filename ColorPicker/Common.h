@@ -1,4 +1,5 @@
 #pragma once
+
 class CCommon
 {
 public:
@@ -13,6 +14,9 @@ public:
 	static void StringNormalize(std::wstring& str);
 
 	static void SetDrawRect(CDC* pDC, CRect rect);
+
+	//将一个字符串保存到剪贴板
+	static bool CopyStringToClipboard(const std::wstring& str);
 
 };
 

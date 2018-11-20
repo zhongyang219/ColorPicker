@@ -65,3 +65,21 @@ void CCommon::SetDrawRect(CDC * pDC, CRect rect)
 	rgn.CreateRectRgnIndirect(rect);
 	pDC->SelectClipRgn(&rgn);
 }
+
+bool CCommon::CopyStringToClipboard(const std::wstring & str)
+{
+	if (OpenClipboard(NULL))
+	{
+		HGLOBAL clipbuffer;
+		EmptyClipboard();
+		size_t size = (str.size() + 1) * 2;
+		clipbuffer = GlobalAlloc(GMEM_DDESHARE, size);
+		memcpy_s(GlobalLock(clipbuffer), size, str.c_str(), size);
+		GlobalUnlock(clipbuffer);
+		if (SetClipboardData(CF_UNICODETEXT, clipbuffer) == NULL)
+			return false;
+		CloseClipboard();
+		return true;
+	}
+	else return false;
+}

@@ -88,4 +88,6 @@ protected:
 	afx_msg LRESULT OnColorDbClicked(WPARAM wParam, LPARAM lParam);
 public:
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnBnClickedCopyRgbButton();
+	afx_msg void OnBnClickedCopyHexButton();
 };

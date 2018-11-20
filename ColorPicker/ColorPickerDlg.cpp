@@ -89,6 +89,8 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_COLOR_DB_CLICKED, &CColorPickerDlg::OnColorDbClicked)
 	ON_WM_GETMINMAXINFO()
+	ON_BN_CLICKED(IDC_COPY_RGB_BUTTON, &CColorPickerDlg::OnBnClickedCopyRgbButton)
+	ON_BN_CLICKED(IDC_COPY_HEX_BUTTON, &CColorPickerDlg::OnBnClickedCopyHexButton)
 END_MESSAGE_MAP()
 
 
@@ -518,4 +520,24 @@ void CColorPickerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	lpMMI->ptMinTrackSize.y = m_min_size.cy;		//设置最小高度
 
 	CDialog::OnGetMinMaxInfo(lpMMI);
+}
+
+
+void CColorPickerDlg::OnBnClickedCopyRgbButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	wchar_t buff[64];
+	swprintf_s(buff, L"%d, %d, %d", m_color_r, m_color_g, m_color_b);
+	CCommon::CopyStringToClipboard(wstring(buff));
+	MessageBox(_T("RGB 颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
+}
+
+
+void CColorPickerDlg::OnBnClickedCopyHexButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	wchar_t buff[64];
+	swprintf_s(buff, L"%.6X", m_color_hex);
+	CCommon::CopyStringToClipboard(wstring(buff));
+	MessageBox(_T("十六进制颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
 }
