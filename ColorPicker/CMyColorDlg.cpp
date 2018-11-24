@@ -123,6 +123,16 @@ BOOL CMyColorDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	CenterWindow();
 
+	//设置控件字体
+	CWnd *pWndChild;
+	pWndChild = GetWindow(GW_CHILD);
+	while (pWndChild)
+	{
+		pWndChild->SetFont(theApp.m_pMainWnd->GetFont());
+		pWndChild = pWndChild->GetWindow(GW_HWNDNEXT);
+	}
+
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
