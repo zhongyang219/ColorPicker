@@ -7,7 +7,7 @@
 #include "afxcolorbutton.h"
 #include "ColorStatic.h"
 #include "ColorListCtrl.h"
-
+#include "CMyColorDlg.h"
 
 // CColorPickerDlg 对话框
 class CColorPickerDlg : public CDialog
@@ -15,6 +15,7 @@ class CColorPickerDlg : public CDialog
 // 构造
 public:
 	CColorPickerDlg(CWnd* pParent = NULL);	// 标准构造函数
+	~CColorPickerDlg();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -29,6 +30,7 @@ public:
 protected:
 	HICON m_hIcon;
 	COLORREF m_color;			//颜色的COLORREF值
+	COLORREF m_color_backup;
 	unsigned char m_color_r;	//颜色RGB中的红色值
 	unsigned char m_color_g;	//颜色RGB中的绿色值
 	unsigned char m_color_b;	//颜色RGB中的蓝色值
@@ -45,8 +47,11 @@ protected:
 	//CMFCColorButton m_color_control;
 	CColorListCtrl m_color_list;
 	CColorStatic m_color_static;
+	CColorStatic m_new_color_static;
 
 	CSize m_min_size;
+
+	CMyColorDlg* m_pColorDlg;
 
 	void SetColorRefText();
 	void SetColorRText();
@@ -90,4 +95,8 @@ public:
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnBnClickedCopyRgbButton();
 	afx_msg void OnBnClickedCopyHexButton();
+	afx_msg void OnBnClickedPickColorButton();
+	afx_msg LRESULT OnColorDialogSelected(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnColorPickCursorMove(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnColorDlgCancel(WPARAM wParam, LPARAM lParam);
 };

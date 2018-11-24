@@ -36,6 +36,7 @@
 
 
 #include <vector>
+#include <afxcontrolbars.h>
 
 
 

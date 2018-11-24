@@ -72,7 +72,7 @@ void CColorStatic::OnMouseLeave()
 BOOL CColorStatic::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	if (m_hover)
+	if (m_hover && m_hand_cursor)
 	{
 		::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(32649)));
 		return TRUE;

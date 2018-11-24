@@ -57,6 +57,12 @@ CColorPickerDlg::CColorPickerDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
+CColorPickerDlg::~CColorPickerDlg()
+{
+	if (m_pColorDlg != nullptr)
+		delete m_pColorDlg;
+}
+
 void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
@@ -69,6 +75,7 @@ void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 	//DDX_Control(pDX, IDC_MFCCOLORBUTTON1, m_color_control);
 	DDX_Control(pDX, IDC_COLOR_LIST, m_color_list);
 	DDX_Control(pDX, IDC_COLOR_STATIC, m_color_static);
+	DDX_Control(pDX, IDC_COLOR_NEW_STATIC, m_new_color_static);
 }
 
 BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
@@ -91,6 +98,10 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_WM_GETMINMAXINFO()
 	ON_BN_CLICKED(IDC_COPY_RGB_BUTTON, &CColorPickerDlg::OnBnClickedCopyRgbButton)
 	ON_BN_CLICKED(IDC_COPY_HEX_BUTTON, &CColorPickerDlg::OnBnClickedCopyHexButton)
+	ON_BN_CLICKED(IDC_PICK_COLOR_BUTTON, &CColorPickerDlg::OnBnClickedPickColorButton)
+	ON_MESSAGE(WM_COLOR_SELECTED, &CColorPickerDlg::OnColorDialogSelected)
+	ON_MESSAGE(WM_COLOR_PICK_CURSOR_MOVE, &CColorPickerDlg::OnColorPickCursorMove)
+	ON_MESSAGE(WM_COLOR_DLG_CANCEL, &CColorPickerDlg::OnColorDlgCancel)
 END_MESSAGE_MAP()
 
 
@@ -208,6 +219,9 @@ BOOL CColorPickerDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	LoadConfig();
+	m_color_backup = m_color;
+
+	m_new_color_static.SetHandCursor(false);
 
 	//获取窗口初始大小
 	CRect rect;
@@ -230,6 +244,9 @@ BOOL CColorPickerDlg::OnInitDialog()
 	m_color_list.LoadColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//从配置文件加载颜色表
 
 	SetColor(m_color);
+
+	m_pColorDlg = new CMyColorDlg();
+	m_pColorDlg->Create(this);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -474,11 +491,17 @@ void CColorPickerDlg::OnBnClickedDeleteColorButton()
 
 afx_msg LRESULT CColorPickerDlg::OnStaticClicked(WPARAM wParam, LPARAM lParam)
 {
-	CMFCColorDialog dlg(m_color);
-	if (dlg.DoModal() == IDOK)
+	//CMFCColorDialog dlg(m_color);
+
+	m_color_backup = m_color;
+
+	if ((CWnd*)wParam == &m_color_static)
 	{
-		SetColor(dlg.GetColor());
+		m_pColorDlg->SetColor(m_color);
+		m_pColorDlg->SetWindowVisible();
+
 	}
+
 	return 0;
 }
 
@@ -540,4 +563,31 @@ void CColorPickerDlg::OnBnClickedCopyHexButton()
 	swprintf_s(buff, L"%.6X", m_color_hex);
 	CCommon::CopyStringToClipboard(wstring(buff));
 	MessageBox(_T("十六进制颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
+}
+
+
+void CColorPickerDlg::OnBnClickedPickColorButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_pColorDlg->OnColorSelect();
+}
+
+LRESULT CColorPickerDlg::OnColorDialogSelected(WPARAM wParam, LPARAM lParam)
+{
+	m_color = m_pColorDlg->GetColor();
+	SetColor(m_color);
+	return LRESULT();
+}
+
+LRESULT CColorPickerDlg::OnColorPickCursorMove(WPARAM wParam, LPARAM lParam)
+{
+	COLORREF color_tmp = wParam;
+	m_new_color_static.SetFillColor(color_tmp);
+	return LRESULT();
+}
+
+LRESULT CColorPickerDlg::OnColorDlgCancel(WPARAM wParam, LPARAM lParam)
+{
+	SetColor(m_color_backup);		//如果点击了颜色对话框的取消按钮，则恢复之前的颜色
+	return LRESULT();
 }

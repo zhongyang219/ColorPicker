@@ -185,6 +185,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CMyColorDlg.h" />
     <ClInclude Include="ColorConvert.h" />
     <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="ColorPickerDlg.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMyColorDlg.cpp" />
     <ClCompile Include="ColorConvert.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ColorPickerDlg.cpp" />

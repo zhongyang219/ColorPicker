@@ -13,10 +13,12 @@ public:
 	virtual ~CColorStatic();
 
 	void SetFillColor(COLORREF fill_color);		//设置要填充的背景色
+	void SetHandCursor(bool hand_cursor) { m_hand_cursor = hand_cursor; }
 
 protected:
 	COLORREF m_fill_color{ RGB(255, 255,255) };
 	bool m_hover{ false };		//当鼠标指向控件时为true
+	bool m_hand_cursor{ true };
 
 protected:
 	DECLARE_MESSAGE_MAP()

@@ -37,6 +37,12 @@
     <Filter Include="公共的类\ColorConvert">
       <UniqueIdentifier>{49bc6d7a-c938-4a69-b166-b6339d2e5157}</UniqueIdentifier>
     </Filter>
+    <Filter Include="对话框">
+      <UniqueIdentifier>{81b33f7e-3bcd-42e9-9153-fa1beed18d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="对话框\MyColorDlg">
+      <UniqueIdentifier>{ec1edb79-0988-4586-9f4b-a94218fe7cf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -72,6 +78,9 @@
     <ClInclude Include="ColorConvert.h">
       <Filter>公共的类\ColorConvert</Filter>
     </ClInclude>
+    <ClInclude Include="CMyColorDlg.h">
+      <Filter>对话框\MyColorDlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -97,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="ColorConvert.cpp">
       <Filter>公共的类\ColorConvert</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyColorDlg.cpp">
+      <Filter>对话框\MyColorDlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
