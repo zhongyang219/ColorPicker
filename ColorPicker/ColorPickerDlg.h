@@ -48,6 +48,7 @@ protected:
 	CColorListCtrl m_color_list;
 	CColorStatic m_color_static;
 	CColorStatic m_new_color_static;
+	CMFCButton m_btnColorSelect;
 
 	CSize m_min_size;
 

@@ -76,6 +76,7 @@ void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COLOR_LIST, m_color_list);
 	DDX_Control(pDX, IDC_COLOR_STATIC, m_color_static);
 	DDX_Control(pDX, IDC_COLOR_NEW_STATIC, m_new_color_static);
+	DDX_Control(pDX, IDC_PICK_COLOR_BUTTON, m_btnColorSelect);
 }
 
 BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
@@ -222,6 +223,9 @@ BOOL CColorPickerDlg::OnInitDialog()
 	m_color_backup = m_color;
 
 	m_new_color_static.SetHandCursor(false);
+
+	m_btnColorSelect.SetImage(IDB_AFXBARRES_COLOR_PICKER);
+	m_btnColorSelect.SetFont(GetFont());
 
 	//获取窗口初始大小
 	CRect rect;
