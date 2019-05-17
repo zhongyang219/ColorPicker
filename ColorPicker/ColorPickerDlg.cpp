@@ -103,6 +103,9 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_MESSAGE(WM_COLOR_SELECTED, &CColorPickerDlg::OnColorDialogSelected)
 	ON_MESSAGE(WM_COLOR_PICK_CURSOR_MOVE, &CColorPickerDlg::OnColorPickCursorMove)
 	ON_MESSAGE(WM_COLOR_DLG_CANCEL, &CColorPickerDlg::OnColorDlgCancel)
+	ON_COMMAND(ID_HEX_LOWER_CASE, &CColorPickerDlg::OnHexLowerCase)
+	ON_WM_INITMENU()
+	ON_COMMAND(ID_APP_ABOUT, &CColorPickerDlg::OnAppAbout)
 END_MESSAGE_MAP()
 
 
@@ -140,7 +143,8 @@ void CColorPickerDlg::SetColorHexText()
 {
 	CString str;
 	str.Format(_T("%.6x"), m_color_hex);
-	str.MakeUpper();
+	if(!m_hex_lowercase)
+		str.MakeUpper();
 	m_edit_hex.SetWindowText(str);
 }
 
@@ -179,6 +183,7 @@ void CColorPickerDlg::SaveConfig() const
 {
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	ini.WriteInt(L"Config", L"current_color", m_color);
+	ini.WriteBool(L"Config", L"hex_lowercase", m_hex_lowercase);
 	ini.Save();
 }
 
@@ -186,6 +191,7 @@ void CColorPickerDlg::LoadConfig()
 {
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	m_color = ini.GetInt(L"Config", L"current_color", 0);
+	m_hex_lowercase = ini.GetBool(L"Config", L"hex_lowercase", false);
 }
 
 
@@ -594,4 +600,29 @@ LRESULT CColorPickerDlg::OnColorDlgCancel(WPARAM wParam, LPARAM lParam)
 {
 	SetColor(m_color_backup);		//如果点击了颜色对话框的取消按钮，则恢复之前的颜色
 	return LRESULT();
+}
+
+
+void CColorPickerDlg::OnHexLowerCase()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_hex_lowercase = !m_hex_lowercase;
+	SetColorHexText();
+}
+
+
+void CColorPickerDlg::OnInitMenu(CMenu* pMenu)
+{
+	CDialog::OnInitMenu(pMenu);
+
+	// TODO: 在此处添加消息处理程序代码
+	pMenu->CheckMenuItem(ID_HEX_LOWER_CASE, MF_BYCOMMAND | (m_hex_lowercase ? MF_CHECKED : MF_UNCHECKED));
+}
+
+
+void CColorPickerDlg::OnAppAbout()
+{
+	// TODO: 在此添加命令处理程序代码
+	CAboutDlg dlgAbout;
+	dlgAbout.DoModal();
 }

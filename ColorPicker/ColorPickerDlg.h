@@ -54,6 +54,10 @@ protected:
 
 	CMyColorDlg* m_pColorDlg;
 
+	//选项设置数据
+	bool m_hex_lowercase{};		//十六进制使用小写字母
+
+protected:
 	void SetColorRefText();
 	void SetColorRText();
 	void SetColorGText();
@@ -100,4 +104,7 @@ public:
 	afx_msg LRESULT OnColorDialogSelected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnColorPickCursorMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnColorDlgCancel(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnHexLowerCase();
+	afx_msg void OnInitMenu(CMenu* pMenu);
+	afx_msg void OnAppAbout();
 };
