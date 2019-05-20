@@ -569,9 +569,9 @@ void CColorPickerDlg::OnBnClickedCopyRgbButton()
 void CColorPickerDlg::OnBnClickedCopyHexButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	wchar_t buff[64];
-	swprintf_s(buff, L"%.6X", m_color_hex);
-	CCommon::CopyStringToClipboard(wstring(buff));
+	CString str;
+	m_edit_hex.GetWindowText(str);
+	CCommon::CopyStringToClipboard(wstring(str.GetString()));
 	MessageBox(_T("十六进制颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
 }
 
