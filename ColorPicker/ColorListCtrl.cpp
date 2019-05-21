@@ -44,12 +44,14 @@ bool CColorListCtrl::DeleteColor(int row)
 
 void CColorListCtrl::Edit(int row)
 {
+	EnsureVisible(row, FALSE);				//编辑一行时确保该行可见
+
 	m_edit_row = row;
 	CRect item_rect;
 	GetSubItemRect(row, CLC_NAME, LVIR_LABEL, item_rect);	//取得子项的矩形
 
 	CString text = GetItemText(row, CLC_NAME);		//取得子项的内容
-	
+
 	m_item_edit.SetWindowText(text);		//将子项的内容显示到编辑框中
 	m_item_edit.ShowWindow(SW_SHOW);		//显示编辑框
 	m_item_edit.MoveWindow(item_rect);		//将编辑框移动到子项上面，覆盖在子项上
@@ -118,6 +120,7 @@ BEGIN_MESSAGE_MAP(CColorListCtrl, CListCtrl)
 	ON_EN_KILLFOCUS(IDC_ITEM_EDITBOX, &CColorListCtrl::OnEnKillfocusEdit1)
 
 	ON_NOTIFY_REFLECT(NM_DBLCLK, &CColorListCtrl::OnNMDblclk)
+	ON_NOTIFY_REFLECT(LVN_BEGINSCROLL, &CColorListCtrl::OnLvnBeginScroll)
 END_MESSAGE_MAP()
 
 
@@ -133,6 +136,18 @@ bool CColorListCtrl::IsColorExist(COLORREF color) const
 		}
 	}
 	return exist;
+}
+
+void CColorListCtrl::EndEdit()
+{
+	if (m_edit_row >= 0 && m_edit_row < static_cast<int>(m_colors.size()))
+	{
+		CString str;
+		m_item_edit.GetWindowText(str);	//取得编辑框的内容
+		SetItemText(m_edit_row, CLC_NAME, str);	//将该内容更新到CListCtrl中
+		m_colors[m_edit_row].name = str;
+	}
+	m_item_edit.ShowWindow(SW_HIDE);//隐藏编辑框
 }
 
 void CColorListCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
@@ -191,14 +206,7 @@ void CColorListCtrl::PreSubclassWindow()
 void CColorListCtrl::OnEnKillfocusEdit1()
 {
 	//当文本编辑控件控件失去焦点时响应
-	if (m_edit_row >= 0 && m_edit_row < static_cast<int>(m_colors.size()))
-	{
-		CString str;
-		m_item_edit.GetWindowText(str);	//取得编辑框的内容
-		SetItemText(m_edit_row, CLC_NAME, str);	//将该内容更新到CListCtrl中
-		m_colors[m_edit_row].name = str;
-		m_item_edit.ShowWindow(SW_HIDE);//隐藏编辑框
-	}
+	EndEdit();
 }
 
 
@@ -218,6 +226,18 @@ void CColorListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		if (pParent != nullptr)
 			pParent->SendMessage(WM_COLOR_DB_CLICKED, (WPARAM)GetColor(row));
 	}
+
+	*pResult = 0;
+}
+
+
+void CColorListCtrl::OnLvnBeginScroll(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// 此功能要求 Internet Explorer 5.5 或更高版本。
+	// 符号 _WIN32_IE 必须是 >= 0x0560。
+	LPNMLVSCROLL pStateChanged = reinterpret_cast<LPNMLVSCROLL>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	EndEdit();
 
 	*pResult = 0;
 }

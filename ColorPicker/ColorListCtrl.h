@@ -46,7 +46,9 @@ protected:
 	CEdit m_item_edit;
 	int m_edit_row{};
 
+protected:
 	bool IsColorExist(COLORREF color) const;
+	void EndEdit();
 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
@@ -55,5 +57,6 @@ protected:
 
 public:
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnBeginScroll(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
