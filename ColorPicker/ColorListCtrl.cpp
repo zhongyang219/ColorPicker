@@ -202,7 +202,7 @@ void CColorListCtrl::PreSubclassWindow()
     InsertColumn(CLC_NAME, _T("名称"), LVCFMT_LEFT, width0);		//插入第1列
     InsertColumn(CLC_COLOR, _T("颜色"), LVCFMT_LEFT, width1);		//插入第2列
 
-    m_item_edit.Create(WS_BORDER, CRect(), this, IDC_ITEM_EDITBOX);
+    m_item_edit.Create(WS_BORDER | ES_AUTOHSCROLL, CRect(), this, IDC_ITEM_EDITBOX);
     m_item_edit.SetFont(GetFont());
 
     CListCtrl::PreSubclassWindow();
