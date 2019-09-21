@@ -106,6 +106,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_COMMAND(ID_HEX_LOWER_CASE, &CColorPickerDlg::OnHexLowerCase)
 	ON_WM_INITMENU()
 	ON_COMMAND(ID_APP_ABOUT, &CColorPickerDlg::OnAppAbout)
+    ON_COMMAND(ID_SELECT_THEME_COLOR, &CColorPickerDlg::OnSelectThemeColor)
 END_MESSAGE_MAP()
 
 
@@ -625,4 +626,11 @@ void CColorPickerDlg::OnAppAbout()
 	// TODO: 在此添加命令处理程序代码
 	CAboutDlg dlgAbout;
 	dlgAbout.DoModal();
+}
+
+
+void CColorPickerDlg::OnSelectThemeColor()
+{
+    // TODO: 在此添加命令处理程序代码
+    SetColor(CCommon::GetWindowsThemeColor());
 }

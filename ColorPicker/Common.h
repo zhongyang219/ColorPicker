@@ -18,5 +18,7 @@ public:
 	//将一个字符串保存到剪贴板
 	static bool CopyStringToClipboard(const std::wstring& str);
 
+    static COLORREF GetWindowsThemeColor();
+
 };
 
