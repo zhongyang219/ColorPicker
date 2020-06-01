@@ -51,6 +51,7 @@ protected:
 	CMFCButton m_btnColorSelect;
 
 	CSize m_min_size;
+	CSize m_window_size{ -1, -1 };
 
 	CMyColorDlg* m_pColorDlg;
 
@@ -109,4 +110,5 @@ public:
 	afx_msg void OnAppAbout();
     afx_msg void OnSelectThemeColor();
     afx_msg void OnAddGetSysColorTable();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

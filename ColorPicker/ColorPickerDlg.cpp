@@ -108,6 +108,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_COMMAND(ID_APP_ABOUT, &CColorPickerDlg::OnAppAbout)
     ON_COMMAND(ID_SELECT_THEME_COLOR, &CColorPickerDlg::OnSelectThemeColor)
     ON_COMMAND(ID_ADD_GET_SYS_COLOR_TABLE, &CColorPickerDlg::OnAddGetSysColorTable)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -186,6 +187,9 @@ void CColorPickerDlg::SaveConfig() const
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	ini.WriteInt(L"Config", L"current_color", m_color);
 	ini.WriteBool(L"Config", L"hex_lowercase", m_hex_lowercase);
+	//保存窗口大小设置
+	ini.WriteInt(_T("Config"), _T("width"), m_window_size.cx);
+	ini.WriteInt(_T("Config"), _T("height"), m_window_size.cy);
 	ini.Save();
 }
 
@@ -194,6 +198,9 @@ void CColorPickerDlg::LoadConfig()
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	m_color = ini.GetInt(L"Config", L"current_color", 0);
 	m_hex_lowercase = ini.GetBool(L"Config", L"hex_lowercase", false);
+	//载入窗口大小设置
+	m_window_size.cx = ini.GetInt(_T("Config"), _T("width"), -1);
+	m_window_size.cy = ini.GetInt(_T("Config"), _T("height"), -1);
 }
 
 
@@ -239,6 +246,12 @@ BOOL CColorPickerDlg::OnInitDialog()
 	CRect rect;
 	GetWindowRect(rect);
 	m_min_size = rect.Size();
+
+	//初始化窗口大小
+	if (m_window_size.cx > 0 && m_window_size.cy > 0)
+	{
+		SetWindowPos(nullptr, 0, 0, m_window_size.cx, m_window_size.cy, SWP_NOZORDER | SWP_NOMOVE);
+	}
 
 	SetColorRefText();
 	SetColorRText();
@@ -696,4 +709,19 @@ void CColorPickerDlg::OnAddGetSysColorTable()
         COLORREF color = GetSysColor(item.first);
         m_color_list.AddColor2(name, color);
     }
+}
+
+
+void CColorPickerDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+
+	// TODO: 在此处添加消息处理程序代码
+	if (nType != SIZE_MAXIMIZED && nType != SIZE_MINIMIZED)
+	{
+		CRect rect;
+		GetWindowRect(&rect);
+		m_window_size.cx = rect.Width();
+		m_window_size.cy = rect.Height();
+	}
 }
