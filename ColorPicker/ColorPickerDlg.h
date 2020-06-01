@@ -108,4 +108,5 @@ public:
 	afx_msg void OnInitMenu(CMenu* pMenu);
 	afx_msg void OnAppAbout();
     afx_msg void OnSelectThemeColor();
+    afx_msg void OnAddGetSysColorTable();
 };

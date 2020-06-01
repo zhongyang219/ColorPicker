@@ -37,7 +37,7 @@
 
 #include <vector>
 #include <afxcontrolbars.h>
-
+#include <map>
 
 
 

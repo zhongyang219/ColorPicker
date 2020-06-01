@@ -15,9 +15,26 @@ CColorListCtrl::~CColorListCtrl()
 {
 }
 
-bool CColorListCtrl::AddColor(const std::wstring name, COLORREF color)
+bool CColorListCtrl::AddColor(const std::wstring& name, COLORREF color)
 {
     if (!IsColorExist(color))
+    {
+        Item item;
+        item.name = name;
+        item.color = color;
+        m_colors.push_back(item);
+        InsertItem(m_colors.size(), name.c_str());
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool CColorListCtrl::AddColor2(const std::wstring & name, COLORREF color)
+{
+    if (!IsColorExist(color, name))
     {
         Item item;
         item.name = name;
@@ -40,6 +57,21 @@ bool CColorListCtrl::DeleteColor(int row)
         DeleteItem(row);
     }
     return false;
+}
+
+void CColorListCtrl::DeleteColors(std::vector<int> rows)
+{
+	int size = static_cast<int>(rows.size());
+	for (int i{}; i < size; i++)
+	{
+		DeleteColor(rows[i]);
+		if (i <= size - 2 && rows[i + 1] > rows[i])
+		{
+			for (int j{ i + 1 }; j < size; j++)
+				rows[j]--;
+		}
+	}
+
 }
 
 void CColorListCtrl::Edit(int row)
@@ -88,10 +120,10 @@ void CColorListCtrl::SaveColors(const wchar_t* path) const
     for (size_t i{}; i < m_colors.size(); i++)
     {
         wchar_t keyName[32];
-        swprintf_s(keyName, L"color%d", i);
+        swprintf_s(keyName, L"color%d", static_cast<int>(i));
         ini.WriteInt(L"Color_table", keyName, m_colors[i].color);
 
-        swprintf_s(keyName, L"name%d", i);
+        swprintf_s(keyName, L"name%d", static_cast<int>(i));
         ini.WriteString(L"Color_table", keyName, m_colors[i].name);
 
     }
@@ -116,6 +148,20 @@ void CColorListCtrl::LoadColors(const wchar_t* path)
 }
 
 
+void CColorListCtrl::GetItemSelected(std::vector<int>& item_selected) const
+{
+	item_selected.clear();
+	POSITION pos = GetFirstSelectedItemPosition();
+	if (pos != NULL)
+	{
+		while (pos)
+		{
+			int nItem = GetNextSelectedItem(pos);
+			item_selected.push_back(nItem);
+		}
+	}
+}
+
 BEGIN_MESSAGE_MAP(CColorListCtrl, CListCtrl)
     ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CColorListCtrl::OnNMCustomdraw)
     ON_EN_KILLFOCUS(IDC_ITEM_EDITBOX, &CColorListCtrl::OnEnKillfocusEdit1)
@@ -131,6 +177,20 @@ bool CColorListCtrl::IsColorExist(COLORREF color) const
     for (const auto& item : m_colors)
     {
         if (item.color == color)
+        {
+            exist = true;
+            break;
+        }
+    }
+    return exist;
+}
+
+bool CColorListCtrl::IsColorExist(COLORREF color, const std::wstring& name) const
+{
+    bool exist{ false };
+    for (const auto& item : m_colors)
+    {
+        if (item.color == color && item.name == name)
         {
             exist = true;
             break;

@@ -24,8 +24,10 @@ public:
     {
         m_draw_color_row = row;    //设置要绘制颜色的列，注意此列必须为最右边的列，否则，此列右边的所有列将无法显示
     }
-    bool AddColor(const std::wstring name, COLORREF color);				//添加一行颜色（如果颜色已经存在，则添加失败）
+    bool AddColor(const std::wstring& name, COLORREF color);				//添加一行颜色（如果颜色已经存在，则添加失败）
+    bool AddColor2(const std::wstring& name, COLORREF color);				//添加一行颜色（如果颜色已经存在，则添加失败）
     bool DeleteColor(int row);		//删除指定行的颜色
+	void DeleteColors(std::vector<int> rows);				//删除多行的颜色
 
     void Edit(int row);			//编辑指定行的第一列
     int GetColorNum() const;
@@ -35,6 +37,8 @@ public:
 
     void SaveColors(const wchar_t* path) const;
     void LoadColors(const wchar_t* path);
+
+	void GetItemSelected(std::vector<int>& item_selected) const;
 
 protected:
     struct Item
@@ -52,6 +56,7 @@ protected:
 
 protected:
     bool IsColorExist(COLORREF color) const;
+    bool IsColorExist(COLORREF color, const std::wstring& name) const;
     void EndEdit();
 
     DECLARE_MESSAGE_MAP()

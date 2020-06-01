@@ -107,6 +107,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_WM_INITMENU()
 	ON_COMMAND(ID_APP_ABOUT, &CColorPickerDlg::OnAppAbout)
     ON_COMMAND(ID_SELECT_THEME_COLOR, &CColorPickerDlg::OnSelectThemeColor)
+    ON_COMMAND(ID_ADD_GET_SYS_COLOR_TABLE, &CColorPickerDlg::OnAddGetSysColorTable)
 END_MESSAGE_MAP()
 
 
@@ -489,13 +490,24 @@ void CColorPickerDlg::OnBnClickedAddColorButton()
 void CColorPickerDlg::OnBnClickedDeleteColorButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	int row = m_color_list.GetSelectionMark();
-	if (row >= 0 && row < m_color_list.GetColorNum())
+	//int row = m_color_list.GetSelectionMark();
+	std::vector<int> items_selected;
+	m_color_list.GetItemSelected(items_selected);
+	CString info;
+	if (items_selected.size() == 1)
 	{
-		CString info;
-		info.Format(_T("确实要删除 “%s” 吗？"), m_color_list.GetColorName(row).c_str());
+		info.Format(_T("确实要删除 “%s” 吗？"), m_color_list.GetColorName(items_selected[0]).c_str());
+	}
+	else if(items_selected.size() > 1)
+	{
+		info.Format(_T("确实要删除选中的“%d”个颜色吗？"), items_selected.size());
+	}
+	if (!info.IsEmpty())
+	{
 		if(MessageBox(info, NULL, MB_ICONQUESTION | MB_YESNO)==IDYES)
-			m_color_list.DeleteColor(row);
+		{
+			m_color_list.DeleteColors(items_selected);
+		}
 	}
 }
 
@@ -633,4 +645,55 @@ void CColorPickerDlg::OnSelectThemeColor()
 {
     // TODO: 在此添加命令处理程序代码
     SetColor(CCommon::GetWindowsThemeColor());
+}
+
+
+void CColorPickerDlg::OnAddGetSysColorTable()
+{
+    // TODO: 在此添加命令处理程序代码
+    const std::map<UINT, const wchar_t*> sys_color_index {
+        {COLOR_3DDKSHADOW, L"COLOR_3DDKSHADOW"},
+        {COLOR_3DFACE, L"COLOR_3DFACE"},
+        {COLOR_3DHIGHLIGHT, L"COLOR_3DHIGHLIGHT"},
+        {COLOR_3DHILIGHT, L"COLOR_3DHILIGHT"},
+        {COLOR_3DLIGHT, L"COLOR_3DLIGHT"},
+        {COLOR_3DSHADOW, L"COLOR_3DSHADOW"},
+        {COLOR_ACTIVEBORDER, L"COLOR_ACTIVEBORDER"},
+        {COLOR_ACTIVECAPTION, L"COLOR_ACTIVECAPTION"},
+        {COLOR_APPWORKSPACE, L"COLOR_APPWORKSPACE"},
+        {COLOR_BACKGROUND, L"COLOR_BACKGROUND"},
+        {COLOR_BTNFACE, L"COLOR_BTNFACE"},
+        {COLOR_BTNHIGHLIGHT, L"COLOR_BTNHIGHLIGHT"},
+        {COLOR_BTNHILIGHT, L"COLOR_BTNHILIGHT"},
+        {COLOR_BTNSHADOW, L"COLOR_BTNSHADOW"},
+        {COLOR_BTNTEXT, L"COLOR_BTNTEXT"},
+        {COLOR_CAPTIONTEXT, L"COLOR_CAPTIONTEXT"},
+        {COLOR_DESKTOP, L"COLOR_DESKTOP"},
+        {COLOR_GRADIENTACTIVECAPTION, L"COLOR_GRADIENTACTIVECAPTION"},
+        {COLOR_GRADIENTINACTIVECAPTION, L"COLOR_GRADIENTINACTIVECAPTION"},
+        {COLOR_GRAYTEXT, L"COLOR_GRAYTEXT"},
+        {COLOR_HIGHLIGHT, L"COLOR_HIGHLIGHT"},
+        {COLOR_HIGHLIGHTTEXT, L"COLOR_HIGHLIGHTTEXT"},
+        {COLOR_HOTLIGHT, L"COLOR_HOTLIGHT"},
+        {COLOR_INACTIVEBORDER, L"COLOR_INACTIVEBORDER"},
+        {COLOR_INACTIVECAPTION, L"COLOR_INACTIVECAPTION"},
+        {COLOR_INACTIVECAPTIONTEXT, L"COLOR_INACTIVECAPTIONTEXT"},
+        {COLOR_INFOBK, L"COLOR_INFOBK"},
+        {COLOR_INFOTEXT, L"COLOR_INFOTEXT"},
+        {COLOR_MENU, L"COLOR_MENU"},
+        {COLOR_MENUHILIGHT, L"COLOR_MENUHILIGHT"},
+        {COLOR_MENUBAR, L"COLOR_MENUBAR"},
+        {COLOR_MENUTEXT, L"COLOR_MENUTEXT"},
+        {COLOR_SCROLLBAR, L"COLOR_SCROLLBAR"},
+        {COLOR_WINDOW, L"COLOR_WINDOW"},
+        {COLOR_WINDOWFRAME, L"COLOR_WINDOWFRAME"},
+        {COLOR_WINDOWTEXT, L"COLOR_WINDOWTEXT"}
+    };
+
+    for (const auto& item : sys_color_index)
+    {
+        wstring name = item.second;
+        COLORREF color = GetSysColor(item.first);
+        m_color_list.AddColor2(name, color);
+    }
 }
