@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ColorPicker.h"
 #include "ColorPickerDlg.h"
+#include "IniHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,6 +38,29 @@ int CColorPickerApp::DPI(int pixel)
 	return m_dpi * pixel / 96;
 }
 
+void CColorPickerApp::SaveConfig()
+{
+	CIniHelper ini(GetModleDir() + CONFIG_FILE_NAME);
+	ini.WriteInt(_T("config"), _T("language"), static_cast<int>(m_language));
+	ini.Save();
+}
+
+void CColorPickerApp::LoadConfig()
+{
+	CIniHelper ini(GetModleDir() + CONFIG_FILE_NAME);
+	m_language = static_cast<Language>(ini.GetInt(_T("config"), _T("language"), 0));
+}
+
+
+void CColorPickerApp::InitThreadLanguage()
+{
+	switch (m_language)
+	{
+	case Language::ENGLISH: SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)); break;
+	case Language::SIMPLIFIED_CHINESE: SetThreadUILanguage(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED)); break;
+	default: break;
+	}
+}
 
 // 唯一的一个 CColorPickerApp 对象
 
@@ -78,6 +102,15 @@ BOOL CColorPickerApp::InitInstance()
 	m_modle_dir = buff;
 	index = m_modle_dir.rfind(L'\\');
 	m_modle_dir = m_modle_dir.substr(0, index + 1);
+
+	//初始化界面语言
+	LoadConfig();
+	switch (m_language)
+	{
+	case Language::ENGLISH: SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)); break;
+	case Language::SIMPLIFIED_CHINESE: SetThreadUILanguage(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED)); break;
+	default: break;
+	}
 
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，

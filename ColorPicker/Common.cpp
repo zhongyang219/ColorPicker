@@ -101,3 +101,46 @@ COLORREF CCommon::GetWindowsThemeColor()
     }
     return theme_color;
 }
+
+CString CCommon::LoadText(UINT id, LPCTSTR back_str)
+{
+	CString str;
+	str.LoadString(id);
+	if (back_str != nullptr)
+		str += back_str;
+	return str;
+}
+
+CString CCommon::LoadText(LPCTSTR front_str, UINT id, LPCTSTR back_str)
+{
+	CString str;
+	str.LoadString(id);
+	if (back_str != nullptr)
+		str += back_str;
+	if (front_str != nullptr)
+		str = front_str + str;
+	return str;
+}
+
+CString CCommon::StringFormat(LPCTSTR format_str, const std::initializer_list<CVariant>& paras)
+{
+	CString str_rtn = format_str;
+	int index = 1;
+	for (const auto& para : paras)
+	{
+		CString para_str = para.ToString();
+		CString format_para;
+		format_para.Format(_T("<%%%d%%>"), index);
+		str_rtn.Replace(format_para, para_str);
+
+		index++;
+	}
+	return str_rtn;
+}
+
+CString CCommon::LoadTextFormat(UINT id, const std::initializer_list<CVariant>& paras)
+{
+	CString str;
+	str.LoadString(id);
+	return StringFormat(str.GetString(), paras);
+}

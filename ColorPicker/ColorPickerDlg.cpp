@@ -109,6 +109,9 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
     ON_COMMAND(ID_SELECT_THEME_COLOR, &CColorPickerDlg::OnSelectThemeColor)
     ON_COMMAND(ID_ADD_GET_SYS_COLOR_TABLE, &CColorPickerDlg::OnAddGetSysColorTable)
 	ON_WM_SIZE()
+	ON_COMMAND(ID_LANGUAGE_FOLLOWING_SYSTEM, &CColorPickerDlg::OnLanguageFollowingSystem)
+	ON_COMMAND(ID_LANGUAGE_ENGLISH, &CColorPickerDlg::OnLanguageEnglish)
+	ON_COMMAND(ID_LANGUAGE_SIMPLIFIED_CHINESE, &CColorPickerDlg::OnLanguageSimplifiedChinese)
 END_MESSAGE_MAP()
 
 
@@ -235,6 +238,7 @@ BOOL CColorPickerDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	LoadConfig();
+
 	m_color_backup = m_color;
 
 	m_new_color_static.SetHandCursor(false);
@@ -484,7 +488,7 @@ void CColorPickerDlg::OnBnClickedAddColorButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CString color_name;
-	color_name.Format(_T("颜色 #%.6x"), m_color_hex);
+	color_name.Format(CCommon::LoadText(IDS_COLOR, _T(" #%.6x")), m_color_hex);
 	color_name.MakeUpper();
 
 	if (m_color_list.AddColor(color_name.GetString(), m_color))
@@ -494,7 +498,7 @@ void CColorPickerDlg::OnBnClickedAddColorButton()
 	else
 	{
 		CString info;
-		info.Format(_T("%s 已经存在于颜色表中！"), color_name.GetString());
+		info.Format(CCommon::LoadText(_T("%s "), IDS_ALREADY_EXIST_INFO) , color_name.GetString());
 		MessageBox(info, NULL, MB_ICONWARNING | MB_OK);
 	}
 }
@@ -509,11 +513,11 @@ void CColorPickerDlg::OnBnClickedDeleteColorButton()
 	CString info;
 	if (items_selected.size() == 1)
 	{
-		info.Format(_T("确实要删除 “%s” 吗？"), m_color_list.GetColorName(items_selected[0]).c_str());
+		info = CCommon::LoadTextFormat(IDS_REMOVE_COLOR_WARNING, { m_color_list.GetColorName(items_selected[0]) });
 	}
 	else if(items_selected.size() > 1)
 	{
-		info.Format(_T("确实要删除选中的“%d”个颜色吗？"), items_selected.size());
+		info = CCommon::LoadTextFormat(IDS_REMOVE_COLORS_WARNING, { items_selected.size() });
 	}
 	if (!info.IsEmpty())
 	{
@@ -588,7 +592,7 @@ void CColorPickerDlg::OnBnClickedCopyRgbButton()
 	wchar_t buff[64];
 	swprintf_s(buff, L"%d, %d, %d", m_color_r, m_color_g, m_color_b);
 	CCommon::CopyStringToClipboard(wstring(buff));
-	MessageBox(_T("RGB 颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
+	MessageBox(CCommon::LoadText(IDS_RGB_VALUE_COPYED_INFO), NULL, MB_ICONINFORMATION | MB_OK);
 }
 
 
@@ -598,7 +602,7 @@ void CColorPickerDlg::OnBnClickedCopyHexButton()
 	CString str;
 	m_edit_hex.GetWindowText(str);
 	CCommon::CopyStringToClipboard(wstring(str.GetString()));
-	MessageBox(_T("十六进制颜色值已经复制到剪贴板"), NULL, MB_ICONINFORMATION | MB_OK);
+	MessageBox(CCommon::LoadText(IDS_HEX_VALUE_COPYED_INFO), NULL, MB_ICONINFORMATION | MB_OK);
 }
 
 
@@ -643,6 +647,13 @@ void CColorPickerDlg::OnInitMenu(CMenu* pMenu)
 
 	// TODO: 在此处添加消息处理程序代码
 	pMenu->CheckMenuItem(ID_HEX_LOWER_CASE, MF_BYCOMMAND | (m_hex_lowercase ? MF_CHECKED : MF_UNCHECKED));
+
+	switch (theApp.m_language)
+	{
+	case Language::ENGLISH: pMenu->CheckMenuRadioItem(ID_LANGUAGE_FOLLOWING_SYSTEM, ID_LANGUAGE_SIMPLIFIED_CHINESE, ID_LANGUAGE_ENGLISH, MF_BYCOMMAND | MF_CHECKED); break;
+	case Language::SIMPLIFIED_CHINESE: pMenu->CheckMenuRadioItem(ID_LANGUAGE_FOLLOWING_SYSTEM, ID_LANGUAGE_SIMPLIFIED_CHINESE, ID_LANGUAGE_SIMPLIFIED_CHINESE, MF_BYCOMMAND | MF_CHECKED); break;
+	default: pMenu->CheckMenuRadioItem(ID_LANGUAGE_FOLLOWING_SYSTEM, ID_LANGUAGE_SIMPLIFIED_CHINESE, ID_LANGUAGE_FOLLOWING_SYSTEM, MF_BYCOMMAND | MF_CHECKED); break;
+	}
 }
 
 
@@ -723,5 +734,41 @@ void CColorPickerDlg::OnSize(UINT nType, int cx, int cy)
 		GetWindowRect(&rect);
 		m_window_size.cx = rect.Width();
 		m_window_size.cy = rect.Height();
+	}
+}
+
+
+void CColorPickerDlg::OnLanguageFollowingSystem()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (theApp.m_language != Language::FOLLOWING_SYSTEM)
+	{
+		theApp.m_language = Language::FOLLOWING_SYSTEM;
+		theApp.SaveConfig();
+		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
+	}
+}
+
+
+void CColorPickerDlg::OnLanguageEnglish()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (theApp.m_language != Language::ENGLISH)
+	{
+		theApp.m_language = Language::ENGLISH;
+		theApp.SaveConfig();
+		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
+	}
+}
+
+
+void CColorPickerDlg::OnLanguageSimplifiedChinese()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (theApp.m_language != Language::SIMPLIFIED_CHINESE)
+	{
+		theApp.m_language = Language::SIMPLIFIED_CHINESE;
+		theApp.SaveConfig();
+		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
 	}
 }

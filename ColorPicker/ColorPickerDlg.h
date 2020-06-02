@@ -111,4 +111,7 @@ public:
     afx_msg void OnSelectThemeColor();
     afx_msg void OnAddGetSysColorTable();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnLanguageFollowingSystem();
+	afx_msg void OnLanguageEnglish();
+	afx_msg void OnLanguageSimplifiedChinese();
 };

@@ -43,6 +43,9 @@
     <Filter Include="对话框\MyColorDlg">
       <UniqueIdentifier>{ec1edb79-0988-4586-9f4b-a94218fe7cf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="公共的类\Variant">
+      <UniqueIdentifier>{05f264d7-4d35-4795-b5cd-36ab922e91a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +84,9 @@
     <ClInclude Include="CMyColorDlg.h">
       <Filter>对话框\MyColorDlg</Filter>
     </ClInclude>
+    <ClInclude Include="CVariant.h">
+      <Filter>公共的类\Variant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -109,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="CMyColorDlg.cpp">
       <Filter>对话框\MyColorDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CVariant.cpp">
+      <Filter>公共的类\Variant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

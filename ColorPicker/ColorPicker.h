@@ -9,6 +9,7 @@
 #endif
 
 #include "resource.h"		// Ö÷·ûºÅ
+#include "Common.h"
 
 
 // CColorPickerApp: 
@@ -22,6 +23,16 @@ public:
 
 	int DPI(int pixel);
 	std::wstring GetModleDir() const { return m_modle_dir; }
+	void InitThreadLanguage();
+
+public:
+	Language m_language;
+
+public:
+	void SaveConfig();
+
+private:
+	void LoadConfig();
 
 // ÖØÐ´
 public:
