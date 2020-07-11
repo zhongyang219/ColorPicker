@@ -263,11 +263,11 @@ BOOL CColorPickerDlg::OnInitDialog()
 	SetColorBText();
 	SetColorHexText();
 
-	m_edit.SetLimitText(8);
+	m_edit.SetLimitText(10);
 	m_edit_r.SetLimitText(3);
 	m_edit_g.SetLimitText(3);
 	m_edit_b.SetLimitText(3);
-	m_edit_hex.SetLimitText(6);
+	m_edit_hex.SetLimitText(8);
 
 	m_color_list.SetDrawColorRow(CLC_COLOR);
 	m_color_list.LoadColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//从配置文件加载颜色表
@@ -364,7 +364,7 @@ void CColorPickerDlg::OnEnChangeColorValue()
 	{
 		CString str;
 		m_edit.GetWindowText(str);
-		m_color = _wtoi(str);
+		m_color = CCommon::StringToNumber(str);
 		m_color_r = GetRValue(m_color);
 		m_color_g = GetGValue(m_color);
 		m_color_b = GetBValue(m_color);
@@ -390,7 +390,7 @@ void CColorPickerDlg::OnEnChangeColorR()
 	{
 		CString str;
 		m_edit_r.GetWindowText(str);
-		m_color_r = _wtoi(str);
+		m_color_r = CCommon::StringToNumber(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
 		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
@@ -412,7 +412,7 @@ void CColorPickerDlg::OnEnChangeColorG()
 	{
 		CString str;
 		m_edit_g.GetWindowText(str);
-		m_color_g = _wtoi(str);
+		m_color_g = CCommon::StringToNumber(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
 		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();
@@ -434,7 +434,7 @@ void CColorPickerDlg::OnEnChangeColorB()
 	{
 		CString str;
 		m_edit_b.GetWindowText(str);
-		m_color_b = _wtoi(str);
+		m_color_b = CCommon::StringToNumber(str);
 		m_color = RGB(m_color_r, m_color_g, m_color_b);
 		m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
 		SetColorRefText();

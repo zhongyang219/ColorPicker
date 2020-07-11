@@ -39,5 +39,8 @@ public:
 	//从资源文件中载入字符串，并将资源字符串中形如<%序号%>的字符串替换成可变参数列表中的参数
 	static CString LoadTextFormat(UINT id, const std::initializer_list<CVariant>& paras);
 
+    //将字符串转换成数字，支持自动识别十六进制、八进制和十进制
+    static unsigned int StringToNumber(const CString& str);
+
 };
 

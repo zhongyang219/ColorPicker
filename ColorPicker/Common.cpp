@@ -144,3 +144,19 @@ CString CCommon::LoadTextFormat(UINT id, const std::initializer_list<CVariant>& 
 	str.LoadString(id);
 	return StringFormat(str.GetString(), paras);
 }
+
+unsigned int CCommon::StringToNumber(const CString& str)
+{
+    //ÅÐ¶Ï½øÖÆ
+    int radix{ 10 };
+    if (str.GetLength() >= 3 && str[0] == _T('0') && (str[1] == _T('x') || str[1] == _T('X')))
+    {
+        radix = 16;
+    }
+    else if (str.GetLength() >= 2 && str[0] == _T('0'))
+    {
+        radix = 8;
+    }
+    TCHAR* end_ptr{};
+    return _tcstoul(str.GetString(), &end_ptr, radix);
+}
