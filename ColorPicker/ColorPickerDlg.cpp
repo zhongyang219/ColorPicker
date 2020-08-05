@@ -156,16 +156,6 @@ void CColorPickerDlg::SetColorHexText()
 
 void CColorPickerDlg::SetPreview()
 {
-	//CDC* pDC = m_preview.GetDC();
-	//CRect rect;
-	//m_preview.GetClientRect(rect);
-	//CBrush BGBrush, *pOldBrush;
-	//BGBrush.CreateSolidBrush(m_color);
-	//pOldBrush = pDC->SelectObject(&BGBrush);
-	//pDC->FillRect(&rect, &BGBrush);
-	//pDC->SelectObject(pOldBrush);
-	//BGBrush.DeleteObject();
-	//m_color_control.SetColor(m_color);
 	m_color_static.SetFillColor(m_color);
 }
 
@@ -623,6 +613,16 @@ LRESULT CColorPickerDlg::OnColorPickCursorMove(WPARAM wParam, LPARAM lParam)
 {
 	COLORREF color_tmp = wParam;
 	m_new_color_static.SetFillColor(color_tmp);
+
+    //
+    CString str_rgb;
+    str_rgb.Format(_T("%d, %d, %d"), GetRValue(color_tmp), GetGValue(color_tmp), GetBValue(color_tmp));
+    SetDlgItemText(IDC_CUR_COLOR_RGB_STATIC, str_rgb);
+
+    CString str_hex;
+    str_hex.Format(_T("#%.6x"), CColorConvert::RGB2Hex(GetRValue(color_tmp), GetGValue(color_tmp), GetBValue(color_tmp)));
+    SetDlgItemText(IDC_CUR_COLOR_HEX_STATIC, str_hex);
+
 	return LRESULT();
 }
 
