@@ -32,6 +32,8 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+    virtual BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialog(IDD_ABOUTBOX)
@@ -45,6 +47,38 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
+
+BOOL CAboutDlg::OnInitDialog()
+{
+    CDialog::OnInitDialog();
+
+    // TODO:  在此添加额外的初始化
+    CString version_info;
+    GetDlgItemText(IDC_STATIC_VERSION, version_info);
+    version_info.Replace(_T("<version>"), VERSION);
+#ifdef _M_X64
+    version_info += _T(" (x64)");
+#endif
+
+#ifdef _DEBUG
+    version_info += _T(" (Debug)");
+#endif
+
+    SetDlgItemText(IDC_STATIC_VERSION, version_info);
+
+    //设置最后编译日期
+    CString temp_str;
+    GetDlgItemText(IDC_STATIC_COPYRIGHT, temp_str);
+    temp_str.Replace(_T("<compile_date>"), COMPILE_DATE);
+    CString year{ COMPILE_DATE };
+    year = year.Left(4);
+    temp_str.Replace(_T("<year>"), year);
+    SetDlgItemText(IDC_STATIC_COPYRIGHT, temp_str);
+
+    return TRUE;  // return TRUE unless you set the focus to a control
+                  // 异常: OCX 属性页应返回 FALSE
+}
+
 
 
 // CColorPickerDlg 对话框

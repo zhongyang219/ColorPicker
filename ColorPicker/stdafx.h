@@ -53,3 +53,6 @@
 #endif
 
 #define CONFIG_FILE_NAME L"color_table.ini"
+
+#define VERSION L"1.32"	//³ÌÐò°æ±¾
+#define COMPILE_DATE L"2020/08/05"
