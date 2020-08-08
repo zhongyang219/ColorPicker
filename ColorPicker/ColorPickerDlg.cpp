@@ -146,6 +146,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_COMMAND(ID_LANGUAGE_FOLLOWING_SYSTEM, &CColorPickerDlg::OnLanguageFollowingSystem)
 	ON_COMMAND(ID_LANGUAGE_ENGLISH, &CColorPickerDlg::OnLanguageEnglish)
 	ON_COMMAND(ID_LANGUAGE_SIMPLIFIED_CHINESE, &CColorPickerDlg::OnLanguageSimplifiedChinese)
+    ON_STN_DBLCLK(IDC_COLOR_NEW_STATIC, &CColorPickerDlg::OnStnDblclickColorNewStatic)
 END_MESSAGE_MAP()
 
 
@@ -557,13 +558,13 @@ afx_msg LRESULT CColorPickerDlg::OnStaticClicked(WPARAM wParam, LPARAM lParam)
 {
 	//CMFCColorDialog dlg(m_color);
 
-	m_color_backup = m_color;
+    CWnd* pStatic = (CWnd*)wParam;
 
-	if ((CWnd*)wParam == &m_color_static)
+	if (pStatic == &m_color_static)
 	{
+        m_color_backup = m_color;
 		m_pColorDlg->SetColor(m_color);
 		m_pColorDlg->SetWindowVisible();
-
 	}
 
 	return 0;
@@ -805,4 +806,11 @@ void CColorPickerDlg::OnLanguageSimplifiedChinese()
 		theApp.SaveConfig();
 		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
 	}
+}
+
+
+void CColorPickerDlg::OnStnDblclickColorNewStatic()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    SetColor(m_new_color_static.GetColor());
 }

@@ -114,4 +114,5 @@ public:
 	afx_msg void OnLanguageFollowingSystem();
 	afx_msg void OnLanguageEnglish();
 	afx_msg void OnLanguageSimplifiedChinese();
+    afx_msg void OnStnDblclickColorNewStatic();
 };

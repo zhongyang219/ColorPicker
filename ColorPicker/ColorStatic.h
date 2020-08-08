@@ -14,6 +14,7 @@ public:
 
 	void SetFillColor(COLORREF fill_color);		//设置要填充的背景色
 	void SetHandCursor(bool hand_cursor) { m_hand_cursor = hand_cursor; }
+    COLORREF GetColor() const { return m_fill_color; }
 
 protected:
 	COLORREF m_fill_color{ RGB(255, 255,255) };
