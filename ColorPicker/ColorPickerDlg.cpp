@@ -1,5 +1,5 @@
-
-// ColorPickerDlg.cpp : ÊµÏÖÎÄ¼ş
+ï»¿
+// ColorPickerDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -14,22 +14,22 @@
 #endif
 
 
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -52,7 +52,7 @@ BOOL CAboutDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+    // TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
     CString version_info;
     GetDlgItemText(IDC_STATIC_VERSION, version_info);
     version_info.Replace(_T("<version>"), VERSION);
@@ -66,7 +66,7 @@ BOOL CAboutDlg::OnInitDialog()
 
     SetDlgItemText(IDC_STATIC_VERSION, version_info);
 
-    //ÉèÖÃ×îºó±àÒëÈÕÆÚ
+    //è®¾ç½®æœ€åç¼–è¯‘æ—¥æœŸ
     CString temp_str;
     GetDlgItemText(IDC_STATIC_COPYRIGHT, temp_str);
     temp_str.Replace(_T("<compile_date>"), COMPILE_DATE);
@@ -76,12 +76,12 @@ BOOL CAboutDlg::OnInitDialog()
     SetDlgItemText(IDC_STATIC_COPYRIGHT, temp_str);
 
     return TRUE;  // return TRUE unless you set the focus to a control
-                  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+                  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }
 
 
 
-// CColorPickerDlg ¶Ô»°¿ò
+// CColorPickerDlg å¯¹è¯æ¡†
 
 
 
@@ -147,37 +147,38 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_COMMAND(ID_LANGUAGE_ENGLISH, &CColorPickerDlg::OnLanguageEnglish)
 	ON_COMMAND(ID_LANGUAGE_SIMPLIFIED_CHINESE, &CColorPickerDlg::OnLanguageSimplifiedChinese)
     ON_STN_DBLCLK(IDC_COLOR_NEW_STATIC, &CColorPickerDlg::OnStnDblclickColorNewStatic)
+    ON_COMMAND(ID_USE_HEX, &CColorPickerDlg::OnUseHex)
 END_MESSAGE_MAP()
 
 
-// CColorPickerDlg ÏûÏ¢´¦Àí³ÌĞò
+// CColorPickerDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CColorPickerDlg::SetColorRefText()
 {
 	CString str;
-	str.Format(_T("%u"), m_color);
-	m_edit.SetWindowText(str);
+    str.Format(GetFormatStr(), m_color);
+    m_edit.SetWindowText(str);
 }
 
 void CColorPickerDlg::SetColorRText()
 {
 	CString str;
-	str.Format(_T("%u"), m_color_r);
-	m_edit_r.SetWindowText(str);
+    str.Format(GetFormatStr(), m_color_r);
+    m_edit_r.SetWindowText(str);
 }
 
 void CColorPickerDlg::SetColorGText()
 {
 	CString str;
-	str.Format(_T("%u"), m_color_g);
-	m_edit_g.SetWindowText(str);
+    str.Format(GetFormatStr(), m_color_g);
+    m_edit_g.SetWindowText(str);
 }
 
 void CColorPickerDlg::SetColorBText()
 {
 	CString str;
-	str.Format(_T("%u"), m_color_b);
-	m_edit_b.SetWindowText(str);
+    str.Format(GetFormatStr(), m_color_b);
+    m_edit_b.SetWindowText(str);
 }
 
 void CColorPickerDlg::SetColorHexText()
@@ -215,7 +216,8 @@ void CColorPickerDlg::SaveConfig() const
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	ini.WriteInt(L"Config", L"current_color", m_color);
 	ini.WriteBool(L"Config", L"hex_lowercase", m_hex_lowercase);
-	//±£´æ´°¿Ú´óĞ¡ÉèÖÃ
+	ini.WriteBool(L"Config", L"use_hex", m_use_hex);
+	//ä¿å­˜çª—å£å¤§å°è®¾ç½®
 	ini.WriteInt(_T("Config"), _T("width"), m_window_size.cx);
 	ini.WriteInt(_T("Config"), _T("height"), m_window_size.cy);
 	ini.Save();
@@ -226,19 +228,37 @@ void CColorPickerDlg::LoadConfig()
 	CIniHelper ini(theApp.GetModleDir() + CONFIG_FILE_NAME);
 	m_color = ini.GetInt(L"Config", L"current_color", 0);
 	m_hex_lowercase = ini.GetBool(L"Config", L"hex_lowercase", false);
-	//ÔØÈë´°¿Ú´óĞ¡ÉèÖÃ
+    m_use_hex = ini.GetBool(L"Config", L"use_hex", false);
+	//è½½å…¥çª—å£å¤§å°è®¾ç½®
 	m_window_size.cx = ini.GetInt(_T("Config"), _T("width"), -1);
 	m_window_size.cy = ini.GetInt(_T("Config"), _T("height"), -1);
 }
 
 
+CString CColorPickerDlg::GetFormatStr() const
+{
+    CString str_format;
+    if (m_use_hex)
+    {
+        if (m_hex_lowercase)
+            str_format = _T("0x%x");
+        else
+            str_format = _T("0x%X");
+    }
+    else
+    {
+        str_format = _T("%u");
+    }
+    return str_format;
+}
+
 BOOL CColorPickerDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
+	// å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
 
-	// IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+	// IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -256,12 +276,12 @@ BOOL CColorPickerDlg::OnInitDialog()
 		}
 	}
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£  µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚  å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-	// TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
 	LoadConfig();
 
 	m_color_backup = m_color;
@@ -271,12 +291,12 @@ BOOL CColorPickerDlg::OnInitDialog()
 	m_btnColorSelect.SetImage(IDB_AFXBARRES_COLOR_PICKER);
 	m_btnColorSelect.SetFont(GetFont());
 
-	//»ñÈ¡´°¿Ú³õÊ¼´óĞ¡
+	//è·å–çª—å£åˆå§‹å¤§å°
 	CRect rect;
 	GetWindowRect(rect);
 	m_min_size = rect.Size();
 
-	//³õÊ¼»¯´°¿Ú´óĞ¡
+	//åˆå§‹åŒ–çª—å£å¤§å°
 	if (m_window_size.cx > 0 && m_window_size.cy > 0)
 	{
 		SetWindowPos(nullptr, 0, 0, m_window_size.cx, m_window_size.cy, SWP_NOZORDER | SWP_NOMOVE);
@@ -289,20 +309,20 @@ BOOL CColorPickerDlg::OnInitDialog()
 	SetColorHexText();
 
 	m_edit.SetLimitText(10);
-	m_edit_r.SetLimitText(3);
-	m_edit_g.SetLimitText(3);
-	m_edit_b.SetLimitText(3);
+	m_edit_r.SetLimitText(4);
+	m_edit_g.SetLimitText(4);
+	m_edit_b.SetLimitText(4);
 	m_edit_hex.SetLimitText(8);
 
 	m_color_list.SetDrawColorRow(CLC_COLOR);
-	m_color_list.LoadColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//´ÓÅäÖÃÎÄ¼ş¼ÓÔØÑÕÉ«±í
+	m_color_list.LoadColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//ä»é…ç½®æ–‡ä»¶åŠ è½½é¢œè‰²è¡¨
 
 	SetColor(m_color);
 
 	m_pColorDlg = new CMyColorDlg();
 	m_pColorDlg->Create(this);
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
 void CColorPickerDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -318,19 +338,19 @@ void CColorPickerDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£  ¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚  å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CColorPickerDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -338,7 +358,7 @@ void CColorPickerDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -347,8 +367,8 @@ void CColorPickerDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CColorPickerDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -358,7 +378,7 @@ HCURSOR CColorPickerDlg::OnQueryDragIcon()
 
 //void CColorPickerDlg::OnBnClickedSelectColor()
 //{
-//	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+//	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 //	CColorDialog colorDlg(m_color, 0, this);
 //	if (colorDlg.DoModal() == IDOK)
 //	{
@@ -379,12 +399,12 @@ HCURSOR CColorPickerDlg::OnQueryDragIcon()
 
 void CColorPickerDlg::OnEnChangeColorValue()
 {
-	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
-	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CDialog::OnInitDialog()
-	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
-	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
+	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
+	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CDialog::OnInitDialog()
+	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
+	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
 
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_edit.GetModify())
 	{
 		CString str;
@@ -405,12 +425,12 @@ void CColorPickerDlg::OnEnChangeColorValue()
 
 void CColorPickerDlg::OnEnChangeColorR()
 {
-	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
-	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CDialog::OnInitDialog()
-	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
-	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
+	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
+	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CDialog::OnInitDialog()
+	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
+	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
 
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_edit_r.GetModify())
 	{
 		CString str;
@@ -427,12 +447,12 @@ void CColorPickerDlg::OnEnChangeColorR()
 
 void CColorPickerDlg::OnEnChangeColorG()
 {
-	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
-	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CDialog::OnInitDialog()
-	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
-	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
+	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
+	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CDialog::OnInitDialog()
+	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
+	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
 
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_edit_g.GetModify())
 	{
 		CString str;
@@ -449,12 +469,12 @@ void CColorPickerDlg::OnEnChangeColorG()
 
 void CColorPickerDlg::OnEnChangeColorB()
 {
-	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
-	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CDialog::OnInitDialog()
-	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
-	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
+	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
+	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CDialog::OnInitDialog()
+	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
+	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
 
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_edit_b.GetModify())
 	{
 		CString str;
@@ -471,12 +491,12 @@ void CColorPickerDlg::OnEnChangeColorB()
 
 void CColorPickerDlg::OnEnChangeColorHex()
 {
-	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
-	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CDialog::OnInitDialog()
-	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
-	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
+	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
+	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CDialog::OnInitDialog()
+	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
+	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
 
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if(m_edit_hex.GetModify())
 	{ 
 		CString str;
@@ -497,7 +517,7 @@ void CColorPickerDlg::OnEnChangeColorHex()
 
 void CColorPickerDlg::OnBnClickedAboutButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	CAboutDlg dlgAbout;
 	dlgAbout.DoModal();
 }
@@ -505,13 +525,13 @@ void CColorPickerDlg::OnBnClickedAboutButton()
 
 //void CColorPickerDlg::OnBnClickedMfccolorbutton1()
 //{
-//	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+//	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 //}
 
 
 void CColorPickerDlg::OnBnClickedAddColorButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	CString color_name;
 	color_name.Format(CCommon::LoadText(IDS_COLOR, _T(" #%.6x")), m_color_hex);
 	color_name.MakeUpper();
@@ -531,7 +551,7 @@ void CColorPickerDlg::OnBnClickedAddColorButton()
 
 void CColorPickerDlg::OnBnClickedDeleteColorButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	//int row = m_color_list.GetSelectionMark();
 	std::vector<int> items_selected;
 	m_color_list.GetItemSelected(items_selected);
@@ -573,8 +593,8 @@ afx_msg LRESULT CColorPickerDlg::OnStaticClicked(WPARAM wParam, LPARAM lParam)
 
 BOOL CColorPickerDlg::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: ÔÚ´ËÌí¼Ó×¨ÓÃ´úÂëºÍ/»òµ÷ÓÃ»ùÀà
-		//ÆÁ±Î°´»Ø³µ¼üºÍESC¼üÍË³ö
+	// TODO: åœ¨æ­¤æ·»åŠ ä¸“ç”¨ä»£ç å’Œ/æˆ–è°ƒç”¨åŸºç±»
+		//å±è”½æŒ‰å›è½¦é”®å’ŒESCé”®é€€å‡º
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)
 		return TRUE;
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
@@ -586,8 +606,8 @@ BOOL CColorPickerDlg::PreTranslateMessage(MSG* pMsg)
 
 void CColorPickerDlg::OnClose()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
-	m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//ÍË³öÊ±½«ÑÕÉ«±í±£´æµ½ÅäÖÃÎÄ¼ş
+	// TODO: åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
+	m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//é€€å‡ºæ—¶å°†é¢œè‰²è¡¨ä¿å­˜åˆ°é…ç½®æ–‡ä»¶
 	SaveConfig();
 
 	CDialog::OnClose();
@@ -602,10 +622,10 @@ afx_msg LRESULT CColorPickerDlg::OnColorDbClicked(WPARAM wParam, LPARAM lParam)
 
 void CColorPickerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
-	// TODO: ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
-	//ÏŞÖÆ´°¿Ú×îĞ¡´óĞ¡
-	lpMMI->ptMinTrackSize.x = m_min_size.cx;		//ÉèÖÃ×îĞ¡¿í¶È
-	lpMMI->ptMinTrackSize.y = m_min_size.cy;		//ÉèÖÃ×îĞ¡¸ß¶È
+	// TODO: åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
+	//é™åˆ¶çª—å£æœ€å°å¤§å°
+	lpMMI->ptMinTrackSize.x = m_min_size.cx;		//è®¾ç½®æœ€å°å®½åº¦
+	lpMMI->ptMinTrackSize.y = m_min_size.cy;		//è®¾ç½®æœ€å°é«˜åº¦
 
 	CDialog::OnGetMinMaxInfo(lpMMI);
 }
@@ -613,7 +633,7 @@ void CColorPickerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 
 void CColorPickerDlg::OnBnClickedCopyRgbButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	wchar_t buff[64];
 	swprintf_s(buff, L"%d, %d, %d", m_color_r, m_color_g, m_color_b);
 	CCommon::CopyStringToClipboard(wstring(buff));
@@ -623,7 +643,7 @@ void CColorPickerDlg::OnBnClickedCopyRgbButton()
 
 void CColorPickerDlg::OnBnClickedCopyHexButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	CString str;
 	m_edit_hex.GetWindowText(str);
 	CCommon::CopyStringToClipboard(wstring(str.GetString()));
@@ -633,7 +653,7 @@ void CColorPickerDlg::OnBnClickedCopyHexButton()
 
 void CColorPickerDlg::OnBnClickedPickColorButton()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	m_pColorDlg->OnColorSelect();
 }
 
@@ -663,16 +683,23 @@ LRESULT CColorPickerDlg::OnColorPickCursorMove(WPARAM wParam, LPARAM lParam)
 
 LRESULT CColorPickerDlg::OnColorDlgCancel(WPARAM wParam, LPARAM lParam)
 {
-	SetColor(m_color_backup);		//Èç¹ûµã»÷ÁËÑÕÉ«¶Ô»°¿òµÄÈ¡Ïû°´Å¥£¬Ôò»Ö¸´Ö®Ç°µÄÑÕÉ«
+	SetColor(m_color_backup);		//å¦‚æœç‚¹å‡»äº†é¢œè‰²å¯¹è¯æ¡†çš„å–æ¶ˆæŒ‰é’®ï¼Œåˆ™æ¢å¤ä¹‹å‰çš„é¢œè‰²
 	return LRESULT();
 }
 
 
 void CColorPickerDlg::OnHexLowerCase()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	m_hex_lowercase = !m_hex_lowercase;
 	SetColorHexText();
+    if (m_use_hex)
+    {
+        SetColorRefText();
+        SetColorRText();
+        SetColorGText();
+        SetColorBText();
+    }
 }
 
 
@@ -680,8 +707,9 @@ void CColorPickerDlg::OnInitMenu(CMenu* pMenu)
 {
 	CDialog::OnInitMenu(pMenu);
 
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
 	pMenu->CheckMenuItem(ID_HEX_LOWER_CASE, MF_BYCOMMAND | (m_hex_lowercase ? MF_CHECKED : MF_UNCHECKED));
+	pMenu->CheckMenuItem(ID_USE_HEX, MF_BYCOMMAND | (m_use_hex ? MF_CHECKED : MF_UNCHECKED));
 
 	switch (theApp.m_language)
 	{
@@ -694,7 +722,7 @@ void CColorPickerDlg::OnInitMenu(CMenu* pMenu)
 
 void CColorPickerDlg::OnAppAbout()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	CAboutDlg dlgAbout;
 	dlgAbout.DoModal();
 }
@@ -702,14 +730,14 @@ void CColorPickerDlg::OnAppAbout()
 
 void CColorPickerDlg::OnSelectThemeColor()
 {
-    // TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
     SetColor(CCommon::GetWindowsThemeColor());
 }
 
 
 void CColorPickerDlg::OnAddGetSysColorTable()
 {
-    // TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
     const std::map<UINT, const wchar_t*> sys_color_index {
         {COLOR_3DDKSHADOW, L"COLOR_3DDKSHADOW"},
         {COLOR_3DFACE, L"COLOR_3DFACE"},
@@ -762,7 +790,7 @@ void CColorPickerDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
 	if (nType != SIZE_MAXIMIZED && nType != SIZE_MINIMIZED)
 	{
 		CRect rect;
@@ -775,7 +803,7 @@ void CColorPickerDlg::OnSize(UINT nType, int cx, int cy)
 
 void CColorPickerDlg::OnLanguageFollowingSystem()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (theApp.m_language != Language::FOLLOWING_SYSTEM)
 	{
 		theApp.m_language = Language::FOLLOWING_SYSTEM;
@@ -787,7 +815,7 @@ void CColorPickerDlg::OnLanguageFollowingSystem()
 
 void CColorPickerDlg::OnLanguageEnglish()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (theApp.m_language != Language::ENGLISH)
 	{
 		theApp.m_language = Language::ENGLISH;
@@ -799,7 +827,7 @@ void CColorPickerDlg::OnLanguageEnglish()
 
 void CColorPickerDlg::OnLanguageSimplifiedChinese()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (theApp.m_language != Language::SIMPLIFIED_CHINESE)
 	{
 		theApp.m_language = Language::SIMPLIFIED_CHINESE;
@@ -811,6 +839,17 @@ void CColorPickerDlg::OnLanguageSimplifiedChinese()
 
 void CColorPickerDlg::OnStnDblclickColorNewStatic()
 {
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     SetColor(m_new_color_static.GetColor());
+}
+
+
+void CColorPickerDlg::OnUseHex()
+{
+    // TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
+    m_use_hex = !m_use_hex;
+    SetColorRefText();
+    SetColorRText();
+    SetColorGText();
+    SetColorBText();
 }

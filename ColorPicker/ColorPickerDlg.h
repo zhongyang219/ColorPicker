@@ -1,5 +1,5 @@
-
-// ColorPickerDlg.h : Í·ÎÄ¼ş
+ï»¿
+// ColorPickerDlg.h : å¤´æ–‡ä»¶
 //
 
 #pragma once
@@ -9,40 +9,40 @@
 #include "ColorListCtrl.h"
 #include "CMyColorDlg.h"
 
-// CColorPickerDlg ¶Ô»°¿ò
+// CColorPickerDlg å¯¹è¯æ¡†
 class CColorPickerDlg : public CDialog
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CColorPickerDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CColorPickerDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
 	~CColorPickerDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_COLORPICKER_DIALOG };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HICON m_hIcon;
-	COLORREF m_color;			//ÑÕÉ«µÄCOLORREFÖµ
+	COLORREF m_color;			//é¢œè‰²çš„COLORREFå€¼
 	COLORREF m_color_backup;
-	unsigned char m_color_r;	//ÑÕÉ«RGBÖĞµÄºìÉ«Öµ
-	unsigned char m_color_g;	//ÑÕÉ«RGBÖĞµÄÂÌÉ«Öµ
-	unsigned char m_color_b;	//ÑÕÉ«RGBÖĞµÄÀ¶É«Öµ
-	unsigned int m_color_hex;	//ÑÕÉ«µÄÊ®Áù½øÖÆÖµ
+	unsigned char m_color_r;	//é¢œè‰²RGBä¸­çš„çº¢è‰²å€¼
+	unsigned char m_color_g;	//é¢œè‰²RGBä¸­çš„ç»¿è‰²å€¼
+	unsigned char m_color_b;	//é¢œè‰²RGBä¸­çš„è“è‰²å€¼
+	unsigned int m_color_hex;	//é¢œè‰²çš„åå…­è¿›åˆ¶å€¼
 
-	CEdit m_edit;		//ÑÕÉ«µÄCOLORREFÖµ¿Ø¼ş
-	CEdit m_edit_r;		//ÑÕÉ«RGBÖĞµÄºìÉ«Öµ¿Ø¼ş
-	CEdit m_edit_g;		//ÑÕÉ«RGBÖĞµÄÂÌÉ«Öµ¿Ø¼ş
-	CEdit m_edit_b;		//ÑÕÉ«RGBÖĞµÄÀ¶É«Öµ¿Ø¼ş
-	CEdit m_edit_hex;	//ÑÕÉ«Ê®Áù½øÖÆÖµ¿Ø¼ş
+	CEdit m_edit;		//é¢œè‰²çš„COLORREFå€¼æ§ä»¶
+	CEdit m_edit_r;		//é¢œè‰²RGBä¸­çš„çº¢è‰²å€¼æ§ä»¶
+	CEdit m_edit_g;		//é¢œè‰²RGBä¸­çš„ç»¿è‰²å€¼æ§ä»¶
+	CEdit m_edit_b;		//é¢œè‰²RGBä¸­çš„è“è‰²å€¼æ§ä»¶
+	CEdit m_edit_hex;	//é¢œè‰²åå…­è¿›åˆ¶å€¼æ§ä»¶
 //	CStatic m_preview;
-//ÑÕÉ«Ô¤ÀÀ¿Ø¼ş
+//é¢œè‰²é¢„è§ˆæ§ä»¶
 
 	//CMFCColorButton m_color_control;
 	CColorListCtrl m_color_list;
@@ -55,8 +55,9 @@ protected:
 
 	CMyColorDlg* m_pColorDlg;
 
-	//Ñ¡ÏîÉèÖÃÊı¾İ
-	bool m_hex_lowercase{};		//Ê®Áù½øÖÆÊ¹ÓÃĞ¡Ğ´×ÖÄ¸
+	//é€‰é¡¹è®¾ç½®æ•°æ®
+	bool m_hex_lowercase{};		//åå…­è¿›åˆ¶ä½¿ç”¨å°å†™å­—æ¯
+    bool m_use_hex{};            //ä½¿ç”¨åå…­è¿›åˆ¶æ˜¾ç¤º
 
 protected:
 	void SetColorRefText();
@@ -72,7 +73,9 @@ protected:
 	void SaveConfig() const;
 	void LoadConfig();
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+    CString GetFormatStr() const;
+
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
@@ -115,4 +118,5 @@ public:
 	afx_msg void OnLanguageEnglish();
 	afx_msg void OnLanguageSimplifiedChinese();
     afx_msg void OnStnDblclickColorNewStatic();
+    afx_msg void OnUseHex();
 };
