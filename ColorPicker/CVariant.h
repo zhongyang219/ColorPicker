@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 class CVariant
 {
 public:
@@ -22,4 +22,3 @@ private:
 	eType m_type;
 
 };
-
