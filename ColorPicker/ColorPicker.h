@@ -1,19 +1,21 @@
-
-// ColorPicker.h : PROJECT_NAME Ó¦ÓÃ³ÌĞòµÄÖ÷Í·ÎÄ¼ş
+ï»¿
+// ColorPicker.h : PROJECT_NAME åº”ç”¨ç¨‹åºçš„ä¸»å¤´æ–‡ä»¶
 //
 
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "ÔÚ°üº¬´ËÎÄ¼şÖ®Ç°°üº¬¡°stdafx.h¡±ÒÔÉú³É PCH ÎÄ¼ş"
+	#error "åœ¨åŒ…å«æ­¤æ–‡ä»¶ä¹‹å‰åŒ…å«â€œstdafx.hâ€ä»¥ç”Ÿæˆ PCH æ–‡ä»¶"
 #endif
 
-#include "resource.h"		// Ö÷·ûºÅ
+#include "resource.h"		// ä¸»ç¬¦å·
 #include "Common.h"
-
+#ifdef _WINDLL
+#include "../include/moduleinterface.h"
+#endif
 
 // CColorPickerApp: 
-// ÓĞ¹Ø´ËÀàµÄÊµÏÖ£¬Çë²ÎÔÄ ColorPicker.cpp
+// æœ‰å…³æ­¤ç±»çš„å®ç°ï¼Œè¯·å‚é˜… ColorPicker.cpp
 //
 
 class CColorPickerApp : public CWinApp
@@ -34,7 +36,7 @@ public:
 private:
 	void LoadConfig();
 
-// ÖØĞ´
+// é‡å†™
 public:
 	virtual BOOL InitInstance();
 
@@ -42,9 +44,36 @@ private:
 	int m_dpi{ 96 };
 	std::wstring m_modle_dir;
 
-// ÊµÏÖ
+// å®ç°
 
 	DECLARE_MESSAGE_MAP()
 };
 
 extern CColorPickerApp theApp;
+
+#ifdef _WINDLL
+//////////////////////////////////////////////////////////////////////////////////////
+class ColorPicker : public IModule
+{
+public:
+
+    // é€šè¿‡ IModule ç»§æ‰¿
+    virtual void InitInstance() override;
+    virtual void UnInitInstance() override;
+    virtual void UiInitComplete(IMainFrame* pMainFrame) override;
+    virtual void* GetMainWindow() override;
+    virtual eMainWindowType GetMainWindowType() const override;
+    virtual const char* GetModuleName() override;
+    virtual void OnCommand(const char* strCmd, bool checked) override;
+};
+#ifdef __cplusplus
+extern "C" {
+#endif
+    //å¯¼å‡ºä¸€ä¸ªåä¸ºCreateInstanceçš„å‡½æ•°ä»¥åˆ›å»ºå¯¹è±¡
+    __declspec(dllexport) IModule* CreateInstance();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -22,7 +22,9 @@ public:
 	enum { IDD = IDD_COLORPICKER_DIALOG };
 #endif
 
-	protected:
+    void SetWindowVisible(bool visible);
+
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 
@@ -58,6 +60,7 @@ protected:
 	//选项设置数据
 	bool m_hex_lowercase{};		//十六进制使用小写字母
     bool m_use_hex{};            //使用十六进制显示
+    bool m_windowVisible{ true };      //窗口是否显示
 
 protected:
 	void SetColorRefText();
@@ -119,4 +122,5 @@ public:
 	afx_msg void OnLanguageSimplifiedChinese();
     afx_msg void OnStnDblclickColorNewStatic();
     afx_msg void OnUseHex();
+    afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 };

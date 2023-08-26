@@ -1,5 +1,5 @@
-
-// ColorPicker.cpp : ∂®“Â”¶”√≥Ã–Úµƒ¿‡––Œ™°£
+Ôªø
+// ColorPicker.cpp : ÂÆö‰πâÂ∫îÁî®Á®ãÂ∫èÁöÑÁ±ªË°å‰∏∫„ÄÇ
 //
 
 #include "stdafx.h"
@@ -19,15 +19,15 @@ BEGIN_MESSAGE_MAP(CColorPickerApp, CWinApp)
 END_MESSAGE_MAP()
 
 
-// CColorPickerApp ππ‘Ï
+// CColorPickerApp ÊûÑÈÄ†
 
 CColorPickerApp::CColorPickerApp()
 {
-	// ÷ß≥÷÷ÿ–¬∆Ù∂Øπ‹¿Ì∆˜
+	// ÊîØÊåÅÈáçÊñ∞ÂêØÂä®ÁÆ°ÁêÜÂô®
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 
-	// TODO: ‘⁄¥À¥¶ÃÌº”ππ‘Ï¥˙¬Î£¨
-	// Ω´À˘”–÷ÿ“™µƒ≥ı ºªØ∑≈÷√‘⁄ InitInstance ÷–
+	// TODO: Âú®Ê≠§Â§ÑÊ∑ªÂä†ÊûÑÈÄ†‰ª£Á†ÅÔºå
+	// Â∞ÜÊâÄÊúâÈáçË¶ÅÁöÑÂàùÂßãÂåñÊîæÁΩÆÂú® InitInstance ‰∏≠
 	CWindowDC dc(NULL);
 	HDC hDC = dc.GetSafeHdc();
 	m_dpi = GetDeviceCaps(hDC, LOGPIXELSY);
@@ -62,40 +62,40 @@ void CColorPickerApp::InitThreadLanguage()
 	}
 }
 
-// Œ®“ªµƒ“ª∏ˆ CColorPickerApp ∂‘œÛ
+// ÂîØ‰∏ÄÁöÑ‰∏Ä‰∏™ CColorPickerApp ÂØπË±°
 
 CColorPickerApp theApp;
 
 
-// CColorPickerApp ≥ı ºªØ
+// CColorPickerApp ÂàùÂßãÂåñ
 
 BOOL CColorPickerApp::InitInstance()
 {
-	//ÃÊªªµÙ∂‘ª∞øÚ≥Ã–Úµƒƒ¨»œ¿‡√˚
+	//ÊõøÊç¢ÊéâÂØπËØùÊ°ÜÁ®ãÂ∫èÁöÑÈªòËÆ§Á±ªÂêç
 	WNDCLASS wc;
-	::GetClassInfo(AfxGetInstanceHandle(), _T("#32770"), &wc);	//MFCƒ¨»œµƒÀ˘”–∂‘ª∞øÚµƒ¿‡√˚Œ™#32770
-	wc.lpszClassName = _T("ColorPicker-2rW332K9");	//Ω´∂‘ª∞øÚµƒ¿‡√˚–ﬁ∏ƒŒ™–¬¿‡√˚
+	::GetClassInfo(AfxGetInstanceHandle(), _T("#32770"), &wc);	//MFCÈªòËÆ§ÁöÑÊâÄÊúâÂØπËØùÊ°ÜÁöÑÁ±ªÂêç‰∏∫#32770
+	wc.lpszClassName = _T("ColorPicker-2rW332K9");	//Â∞ÜÂØπËØùÊ°ÜÁöÑÁ±ªÂêç‰øÆÊîπ‰∏∫Êñ∞Á±ªÂêç
 	AfxRegisterClass(&wc);
 
-	//ºÏ≤È «∑Ò“—”– µ¿˝’˝‘⁄‘À––£®Debug ±≤ªºÏ≤È£©
+	//Ê£ÄÊü•ÊòØÂê¶Â∑≤ÊúâÂÆû‰æãÊ≠£Âú®ËøêË°åÔºàDebugÊó∂‰∏çÊ£ÄÊü•Ôºâ
 #ifndef _DEBUG
-	HANDLE hMutex = ::CreateMutex(NULL, TRUE, _T("c1A0pd1NE1v7"));		// π”√“ª∏ˆÀÊª˙µƒ◊÷∑˚¥Æ¥¥Ω®“ª∏ˆª•≥‚¡ø
+	HANDLE hMutex = ::CreateMutex(NULL, TRUE, _T("c1A0pd1NE1v7"));		//‰ΩøÁî®‰∏Ä‰∏™ÈöèÊú∫ÁöÑÂ≠óÁ¨¶‰∏≤ÂàõÂª∫‰∏Ä‰∏™‰∫íÊñ•Èáè
 	if (hMutex != NULL)
 	{
-		if (GetLastError() == ERROR_ALREADY_EXISTS)		//ª•≥‚¡ø¥¥Ω® ß∞‹£¨Àµ√˜“—æ≠”–“ª∏ˆ≥Ã–Úµƒ µ¿˝’˝‘⁄‘À––
+		if (GetLastError() == ERROR_ALREADY_EXISTS)		//‰∫íÊñ•ÈáèÂàõÂª∫Â§±Ë¥•ÔºåËØ¥ÊòéÂ∑≤ÁªèÊúâ‰∏Ä‰∏™Á®ãÂ∫èÁöÑÂÆû‰æãÊ≠£Âú®ËøêË°å
 		{
-			HWND handle = FindWindow(_T("ColorPicker-2rW332K9"), NULL);		//∏˘æ›¿‡√˚≤È’““—‘À–– µ¿˝¥∞ø⁄µƒæ‰±˙
+			HWND handle = FindWindow(_T("ColorPicker-2rW332K9"), NULL);		//Ê†πÊçÆÁ±ªÂêçÊü•ÊâæÂ∑≤ËøêË°åÂÆû‰æãÁ™óÂè£ÁöÑÂè•ÊüÑ
 			if (handle != NULL)
 			{
-				ShowWindow(handle, SW_SHOWNORMAL);		//œ‘ æ’˝‘⁄‘À––µƒ¥∞ø⁄
+				ShowWindow(handle, SW_SHOWNORMAL);		//ÊòæÁ§∫Ê≠£Âú®ËøêË°åÁöÑÁ™óÂè£
 				SetForegroundWindow(handle);
-				return FALSE;		//ÕÀ≥ˆµ±«∞≥Ã–Ú
+				return FALSE;		//ÈÄÄÂá∫ÂΩìÂâçÁ®ãÂ∫è
 			}
 		}
 	}
 #endif
 
-	//ªÒ»°µ±«∞≥Ã–Ú¬∑æ∂
+	//Ëé∑ÂèñÂΩìÂâçÁ®ãÂ∫èË∑ØÂæÑ
 	wchar_t buff[MAX_PATH];
 	GetModuleFileNameW(NULL, buff, MAX_PATH);
 	size_t index;
@@ -103,7 +103,7 @@ BOOL CColorPickerApp::InitInstance()
 	index = m_modle_dir.rfind(L'\\');
 	m_modle_dir = m_modle_dir.substr(0, index + 1);
 
-	//≥ı ºªØΩÁ√Ê”Ô—‘
+	//ÂàùÂßãÂåñÁïåÈù¢ËØ≠Ë®Ä
 	LoadConfig();
 	switch (m_language)
 	{
@@ -112,13 +112,13 @@ BOOL CColorPickerApp::InitInstance()
 	default: break;
 	}
 
-	// »Áπ˚“ª∏ˆ‘À––‘⁄ Windows XP …œµƒ”¶”√≥Ã–Ú«Âµ•÷∏∂®“™
-	//  π”√ ComCtl32.dll ∞Ê±æ 6 ªÚ∏¸∏ﬂ∞Ê±æ¿¥∆Ù”√ø… ”ªØ∑Ω Ω£¨
-	//‘Ú–Ë“™ InitCommonControlsEx()°£  ∑Ò‘Ú£¨Ω´Œﬁ∑®¥¥Ω®¥∞ø⁄°£
+	// Â¶ÇÊûú‰∏Ä‰∏™ËøêË°åÂú® Windows XP ‰∏äÁöÑÂ∫îÁî®Á®ãÂ∫èÊ∏ÖÂçïÊåáÂÆöË¶Å
+	// ‰ΩøÁî® ComCtl32.dll ÁâàÊú¨ 6 ÊàñÊõ¥È´òÁâàÊú¨Êù•ÂêØÁî®ÂèØËßÜÂåñÊñπÂºèÔºå
+	//ÂàôÈúÄË¶Å InitCommonControlsEx()„ÄÇ  Âê¶ÂàôÔºåÂ∞ÜÊó†Ê≥ïÂàõÂª∫Á™óÂè£„ÄÇ
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
-	// Ω´À¸…Ë÷√Œ™∞¸¿®À˘”–“™‘⁄”¶”√≥Ã–Ú÷– π”√µƒ
-	// π´π≤øÿº˛¿‡°£
+	// Â∞ÜÂÆÉËÆæÁΩÆ‰∏∫ÂåÖÊã¨ÊâÄÊúâË¶ÅÂú®Â∫îÁî®Á®ãÂ∫è‰∏≠‰ΩøÁî®ÁöÑ
+	// ÂÖ¨ÂÖ±Êéß‰ª∂Á±ª„ÄÇ
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
@@ -127,42 +127,50 @@ BOOL CColorPickerApp::InitInstance()
 
 	AfxEnableControlContainer();
 
-	// ¥¥Ω® shell π‹¿Ì∆˜£¨“‘∑¿∂‘ª∞øÚ∞¸∫¨
-	// »Œ∫Œ shell  ˜ ”Õºøÿº˛ªÚ shell ¡–±Ì ”Õºøÿº˛°£
+	// ÂàõÂª∫ shell ÁÆ°ÁêÜÂô®Ôºå‰ª•Èò≤ÂØπËØùÊ°ÜÂåÖÂê´
+	// ‰ªª‰Ωï shell Ê†ëËßÜÂõæÊéß‰ª∂Êàñ shell ÂàóË°®ËßÜÂõæÊéß‰ª∂„ÄÇ
 	CShellManager *pShellManager = new CShellManager;
 
-	// º§ªÓ°∞Windows Native°± ”æıπ‹¿Ì∆˜£¨“‘±„‘⁄ MFC øÿº˛÷–∆Ù”√÷˜Ã‚
+	// ÊøÄÊ¥ª‚ÄúWindows Native‚ÄùËßÜËßâÁÆ°ÁêÜÂô®Ôºå‰ª•‰æøÂú® MFC Êéß‰ª∂‰∏≠ÂêØÁî®‰∏ªÈ¢ò
 	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
 
-	// ±Í◊º≥ı ºªØ
-	// »Áπ˚Œ¥ π”√’‚–©π¶ƒ‹≤¢œ£Õ˚ºı–°
-	// ◊Ó÷’ø…÷¥––Œƒº˛µƒ¥Û–°£¨‘Ú”¶“∆≥˝œ¬¡–
-	// ≤ª–Ë“™µƒÃÿ∂®≥ı ºªØ¿˝≥Ã
-	// ∏¸∏ƒ”√”⁄¥Ê¥¢…Ë÷√µƒ◊¢≤·±ÌœÓ
-	// TODO: ”¶  µ±–ﬁ∏ƒ∏√◊÷∑˚¥Æ£¨
-	// ¿˝»Á–ﬁ∏ƒŒ™π´ÀæªÚ◊È÷Ø√˚
-	//SetRegistryKey(_T("”¶”√≥Ã–ÚœÚµº…˙≥…µƒ±æµÿ”¶”√≥Ã–Ú"));
+	// Ê†áÂáÜÂàùÂßãÂåñ
+	// Â¶ÇÊûúÊú™‰ΩøÁî®Ëøô‰∫õÂäüËÉΩÂπ∂Â∏åÊúõÂáèÂ∞è
+	// ÊúÄÁªàÂèØÊâßË°åÊñá‰ª∂ÁöÑÂ§ßÂ∞èÔºåÂàôÂ∫îÁßªÈô§‰∏ãÂàó
+	// ‰∏çÈúÄË¶ÅÁöÑÁâπÂÆöÂàùÂßãÂåñ‰æãÁ®ã
+	// Êõ¥ÊîπÁî®‰∫éÂ≠òÂÇ®ËÆæÁΩÆÁöÑÊ≥®ÂÜåË°®È°π
+	// TODO: Â∫îÈÄÇÂΩì‰øÆÊîπËØ•Â≠óÁ¨¶‰∏≤Ôºå
+	// ‰æãÂ¶Ç‰øÆÊîπ‰∏∫ÂÖ¨Âè∏ÊàñÁªÑÁªáÂêç
+	//SetRegistryKey(_T("Â∫îÁî®Á®ãÂ∫èÂêëÂØºÁîüÊàêÁöÑÊú¨Âú∞Â∫îÁî®Á®ãÂ∫è"));
 
+#ifdef _WINDLL
+    CColorPickerDlg* pDlg = new CColorPickerDlg();
+    m_pMainWnd = pDlg;
+    pDlg->Create(IDD_COLORPICKER_DIALOG);
+
+    return TRUE;
+
+#else
 	CColorPickerDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-		// TODO: ‘⁄¥À∑≈÷√¥¶¿Ì∫Œ ±”√
-		//  °∞»∑∂®°±¿¥πÿ±’∂‘ª∞øÚµƒ¥˙¬Î
+		// TODO: Âú®Ê≠§ÊîæÁΩÆÂ§ÑÁêÜ‰ΩïÊó∂Áî®
+		//  ‚ÄúÁ°ÆÂÆö‚ÄùÊù•ÂÖ≥Èó≠ÂØπËØùÊ°ÜÁöÑ‰ª£Á†Å
 	}
 	else if (nResponse == IDCANCEL)
 	{
-		// TODO: ‘⁄¥À∑≈÷√¥¶¿Ì∫Œ ±”√
-		//  °∞»°œ˚°±¿¥πÿ±’∂‘ª∞øÚµƒ¥˙¬Î
+		// TODO: Âú®Ê≠§ÊîæÁΩÆÂ§ÑÁêÜ‰ΩïÊó∂Áî®
+		//  ‚ÄúÂèñÊ∂à‚ÄùÊù•ÂÖ≥Èó≠ÂØπËØùÊ°ÜÁöÑ‰ª£Á†Å
 	}
 	else if (nResponse == -1)
 	{
-		TRACE(traceAppMsg, 0, "æØ∏Ê: ∂‘ª∞øÚ¥¥Ω® ß∞‹£¨”¶”√≥Ã–ÚΩ´“‚Õ‚÷’÷π°£\n");
-		TRACE(traceAppMsg, 0, "æØ∏Ê: »Áπ˚ƒ˙‘⁄∂‘ª∞øÚ…œ π”√ MFC øÿº˛£¨‘ÚŒﬁ∑® #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS°£\n");
+		TRACE(traceAppMsg, 0, "Ë≠¶Âëä: ÂØπËØùÊ°ÜÂàõÂª∫Â§±Ë¥•ÔºåÂ∫îÁî®Á®ãÂ∫èÂ∞ÜÊÑèÂ§ñÁªàÊ≠¢„ÄÇ\n");
+		TRACE(traceAppMsg, 0, "Ë≠¶Âëä: Â¶ÇÊûúÊÇ®Âú®ÂØπËØùÊ°Ü‰∏ä‰ΩøÁî® MFC Êéß‰ª∂ÔºåÂàôÊó†Ê≥ï #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS„ÄÇ\n");
 	}
 
-	// …æ≥˝…œ√Ê¥¥Ω®µƒ shell π‹¿Ì∆˜°£
+	// Âà†Èô§‰∏äÈù¢ÂàõÂª∫ÁöÑ shell ÁÆ°ÁêÜÂô®„ÄÇ
 	if (pShellManager != NULL)
 	{
 		delete pShellManager;
@@ -172,8 +180,106 @@ BOOL CColorPickerApp::InitInstance()
 	ControlBarCleanUp();
 #endif
 
-	// ”…”⁄∂‘ª∞øÚ“—πÿ±’£¨À˘“‘Ω´∑µªÿ FALSE “‘±„ÕÀ≥ˆ”¶”√≥Ã–Ú£¨
-	//  ∂¯≤ª «∆Ù∂Ø”¶”√≥Ã–Úµƒœ˚œ¢±√°£
+	// Áî±‰∫éÂØπËØùÊ°ÜÂ∑≤ÂÖ≥Èó≠ÔºåÊâÄ‰ª•Â∞ÜËøîÂõû FALSE ‰ª•‰æøÈÄÄÂá∫Â∫îÁî®Á®ãÂ∫èÔºå
+	//  ËÄå‰∏çÊòØÂêØÂä®Â∫îÁî®Á®ãÂ∫èÁöÑÊ∂àÊÅØÊ≥µ„ÄÇ
 	return FALSE;
+#endif
 }
 
+#ifdef _WINDLL
+
+void ColorPicker::InitInstance()
+{
+    int nReturnCode = -1;
+    CWinThread* pThread = AfxGetThread();
+    CWinApp* pApp = AfxGetApp();
+
+    // AFX internal initialization
+    if (!AfxWinInit(GetModuleHandle(_T("ColorPicker")), nullptr, _T(""), SW_SHOW))
+        return;
+
+    // App global initializations (rare)
+    if (pApp != NULL && !pApp->InitApplication())
+        return;
+
+    // Perform specific initializations
+    if (pThread != nullptr && !pThread->InitInstance())
+    {
+        if (pThread->m_pMainWnd != NULL)
+        {
+            TRACE(traceAppMsg, 0, "Warning: Destroying non-NULL m_pMainWnd\n");
+            pThread->m_pMainWnd->DestroyWindow();
+        }
+    }
+    //nReturnCode = pThread->Run();
+}
+
+void ColorPicker::UnInitInstance()
+{
+    int nReturnCode = -1;
+    CWinThread* pThread = AfxGetThread();
+    if (pThread != nullptr)
+        nReturnCode = pThread->ExitInstance();
+#ifdef _DEBUG
+    // Check for missing AfxLockTempMap calls
+    if (AfxGetModuleThreadState()->m_nTempMapLock != 0)
+    {
+        TRACE(traceAppMsg, 0, "Warning: Temp map lock count non-zero (%ld).\n",
+            AfxGetModuleThreadState()->m_nTempMapLock);
+    }
+    AfxLockTempMaps();
+    AfxUnlockTempMaps(-1);
+#endif
+
+    AfxWinTerm();
+}
+
+void ColorPicker::UiInitComplete(IMainFrame* pMainFrame)
+{
+    //ÊòæÁ§∫‰∏ªÁ™óÂè£
+    CColorPickerDlg* pDlg = dynamic_cast<CColorPickerDlg*>(theApp.m_pMainWnd);
+    pDlg->SetWindowVisible(true);
+}
+
+void* ColorPicker::GetMainWindow()
+{
+    HWND hWnd = theApp.m_pMainWnd->GetSafeHwnd();
+    return hWnd;
+}
+
+IModule::eMainWindowType ColorPicker::GetMainWindowType() const
+{
+    return IModule::MT_HWND;
+}
+
+const char* ColorPicker::GetModuleName()
+{
+    return "ColorPicker";
+}
+
+#define DECLARE_COMMAND_TRIGGER(cmdString, id) \
+if (cmd == cmdString) \
+{ \
+    theApp.m_pMainWnd->SendMessage(WM_COMMAND, id); \
+} \
+
+
+void ColorPicker::OnCommand(const char* strCmd, bool checked)
+{
+    std::string cmd = strCmd;
+    DECLARE_COMMAND_TRIGGER("UseHex", ID_USE_HEX)
+    DECLARE_COMMAND_TRIGGER("HexLowerCase", ID_HEX_LOWER_CASE)
+    DECLARE_COMMAND_TRIGGER("LanguageFollowingSystem", ID_LANGUAGE_FOLLOWING_SYSTEM)
+    DECLARE_COMMAND_TRIGGER("LanguageEnglish", ID_LANGUAGE_ENGLISH)
+    DECLARE_COMMAND_TRIGGER("LanguageSimplifiedChinese", ID_LANGUAGE_SIMPLIFIED_CHINESE)
+    DECLARE_COMMAND_TRIGGER("SelectThemeColor", ID_SELECT_THEME_COLOR)
+    DECLARE_COMMAND_TRIGGER("AddGetSysColorTable", ID_ADD_GET_SYS_COLOR_TABLE)
+    DECLARE_COMMAND_TRIGGER("ColorPickerAppAbout", ID_APP_ABOUT)
+}
+
+IModule* CreateInstance()
+{
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    return new ColorPicker();
+}
+#endif

@@ -88,6 +88,10 @@ BOOL CAboutDlg::OnInitDialog()
 CColorPickerDlg::CColorPickerDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_COLORPICKER_DIALOG, pParent)
 {
+#ifdef _WINDLL
+    m_windowVisible = false;
+#endif
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -95,6 +99,11 @@ CColorPickerDlg::~CColorPickerDlg()
 {
 	if (m_pColorDlg != nullptr)
 		delete m_pColorDlg;
+}
+
+void CColorPickerDlg::SetWindowVisible(bool visible)
+{
+    m_windowVisible = visible;
 }
 
 void CColorPickerDlg::DoDataExchange(CDataExchange* pDX)
@@ -148,6 +157,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
 	ON_COMMAND(ID_LANGUAGE_SIMPLIFIED_CHINESE, &CColorPickerDlg::OnLanguageSimplifiedChinese)
     ON_STN_DBLCLK(IDC_COLOR_NEW_STATIC, &CColorPickerDlg::OnStnDblclickColorNewStatic)
     ON_COMMAND(ID_USE_HEX, &CColorPickerDlg::OnUseHex)
+    ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
 
@@ -852,4 +862,13 @@ void CColorPickerDlg::OnUseHex()
     SetColorRText();
     SetColorGText();
     SetColorBText();
+}
+
+
+void CColorPickerDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+    CDialog::OnWindowPosChanging(lpwndpos);
+
+    if (!m_windowVisible)
+        lpwndpos->flags &= ~SWP_SHOWWINDOW;
 }
