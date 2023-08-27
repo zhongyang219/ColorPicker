@@ -269,6 +269,16 @@ CString CColorPickerDlg::GetFormatStr() const
     return str_format;
 }
 
+void CColorPickerDlg::ShowMessage(LPCTSTR text)
+{
+#ifdef _WINDLL
+    ColorPicker::Instance()->GetMainFrame()->SetStatusBarText(CCommon::UnicodeToStr(text, true).c_str(), 10000);
+//#else
+//    MessageBox(text, NULL, MB_ICONINFORMATION | MB_OK);
+#endif
+
+}
+
 void CColorPickerDlg::UpdateMainFrameCmdState()
 {
 #ifdef _WINDLL
@@ -667,7 +677,7 @@ void CColorPickerDlg::OnBnClickedCopyRgbButton()
 	wchar_t buff[64];
 	swprintf_s(buff, L"%d, %d, %d", m_color_r, m_color_g, m_color_b);
 	CCommon::CopyStringToClipboard(wstring(buff));
-	MessageBox(CCommon::LoadText(IDS_RGB_VALUE_COPYED_INFO), NULL, MB_ICONINFORMATION | MB_OK);
+    ShowMessage(CCommon::LoadText(IDS_RGB_VALUE_COPYED_INFO));
 }
 
 
@@ -677,7 +687,7 @@ void CColorPickerDlg::OnBnClickedCopyHexButton()
 	CString str;
 	m_edit_hex.GetWindowText(str);
 	CCommon::CopyStringToClipboard(wstring(str.GetString()));
-	MessageBox(CCommon::LoadText(IDS_HEX_VALUE_COPYED_INFO), NULL, MB_ICONINFORMATION | MB_OK);
+    ShowMessage(CCommon::LoadText(IDS_HEX_VALUE_COPYED_INFO));
 }
 
 

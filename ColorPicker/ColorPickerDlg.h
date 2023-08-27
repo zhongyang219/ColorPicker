@@ -79,6 +79,8 @@ protected:
 
     CString GetFormatStr() const;
 
+    void ShowMessage(LPCTSTR text);
+
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
