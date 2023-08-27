@@ -188,6 +188,17 @@ BOOL CColorPickerApp::InitInstance()
 
 #ifdef _WINDLL
 
+ColorPicker* pIns = nullptr;
+ColorPicker* ColorPicker::Instance()
+{
+    return pIns;
+}
+
+IMainFrame* ColorPicker::GetMainFrame() const
+{
+    return m_pMainFrame;
+}
+
 void ColorPicker::InitInstance()
 {
     int nReturnCode = -1;
@@ -236,9 +247,11 @@ void ColorPicker::UnInitInstance()
 
 void ColorPicker::UiInitComplete(IMainFrame* pMainFrame)
 {
+    m_pMainFrame = pMainFrame;
     //显示主窗口
     CColorPickerDlg* pDlg = dynamic_cast<CColorPickerDlg*>(theApp.m_pMainWnd);
     pDlg->SetWindowVisible(true);
+    pDlg->UpdateMainFrameCmdState();
 }
 
 void* ColorPicker::GetMainWindow()
@@ -280,6 +293,7 @@ void ColorPicker::OnCommand(const char* strCmd, bool checked)
 IModule* CreateInstance()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    return new ColorPicker();
+    pIns = new ColorPicker();
+    return pIns;
 }
 #endif

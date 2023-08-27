@@ -23,6 +23,10 @@ public:
 #endif
 
     void SetWindowVisible(bool visible);
+    void UpdateMainFrameCmdState();
+
+    void SaveConfig() const;
+    void LoadConfig();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
@@ -73,9 +77,6 @@ protected:
 
 	void SetColor(COLORREF color);
 
-	void SaveConfig() const;
-	void LoadConfig();
-
     CString GetFormatStr() const;
 
 	// 生成的消息映射函数
@@ -123,4 +124,5 @@ public:
     afx_msg void OnStnDblclickColorNewStatic();
     afx_msg void OnUseHex();
     afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+    afx_msg void OnDestroy();
 };

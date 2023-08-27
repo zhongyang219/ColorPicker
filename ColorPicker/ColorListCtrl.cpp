@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "ColorListCtrl.h"
 #include "Common.h"
 #include "ColorPicker.h"
@@ -76,19 +76,19 @@ void CColorListCtrl::DeleteColors(std::vector<int> rows)
 
 void CColorListCtrl::Edit(int row)
 {
-    EnsureVisible(row, FALSE);				//±à¼­Ò»ĞĞÊ±È·±£¸ÃĞĞ¿É¼û
+    EnsureVisible(row, FALSE);				//ç¼–è¾‘ä¸€è¡Œæ—¶ç¡®ä¿è¯¥è¡Œå¯è§
     m_editing = true;
 
     m_edit_row = row;
     CRect item_rect;
-    GetSubItemRect(row, CLC_NAME, LVIR_LABEL, item_rect);	//È¡µÃ×ÓÏîµÄ¾ØĞÎ
+    GetSubItemRect(row, CLC_NAME, LVIR_LABEL, item_rect);	//å–å¾—å­é¡¹çš„çŸ©å½¢
 
-    CString text = GetItemText(row, CLC_NAME);		//È¡µÃ×ÓÏîµÄÄÚÈİ
+    CString text = GetItemText(row, CLC_NAME);		//å–å¾—å­é¡¹çš„å†…å®¹
 
-    m_item_edit.SetWindowText(text);		//½«×ÓÏîµÄÄÚÈİÏÔÊ¾µ½±à¼­¿òÖĞ
-    m_item_edit.ShowWindow(SW_SHOW);		//ÏÔÊ¾±à¼­¿ò
-    m_item_edit.MoveWindow(item_rect);		//½«±à¼­¿òÒÆ¶¯µ½×ÓÏîÉÏÃæ£¬¸²¸ÇÔÚ×ÓÏîÉÏ
-    m_item_edit.SetFocus();					//Ê¹±à¼­¿òÈ¡µÃ½¹µã
+    m_item_edit.SetWindowText(text);		//å°†å­é¡¹çš„å†…å®¹æ˜¾ç¤ºåˆ°ç¼–è¾‘æ¡†ä¸­
+    m_item_edit.ShowWindow(SW_SHOW);		//æ˜¾ç¤ºç¼–è¾‘æ¡†
+    m_item_edit.MoveWindow(item_rect);		//å°†ç¼–è¾‘æ¡†ç§»åŠ¨åˆ°å­é¡¹ä¸Šé¢ï¼Œè¦†ç›–åœ¨å­é¡¹ä¸Š
+    m_item_edit.SetFocus();					//ä½¿ç¼–è¾‘æ¡†å–å¾—ç„¦ç‚¹
     m_item_edit.SetSel(0, -1);
 }
 
@@ -206,11 +206,11 @@ void CColorListCtrl::EndEdit()
         if (m_edit_row >= 0 && m_edit_row < static_cast<int>(m_colors.size()))
         {
             CString str;
-            m_item_edit.GetWindowText(str);	//È¡µÃ±à¼­¿òµÄÄÚÈİ
-            SetItemText(m_edit_row, CLC_NAME, str);	//½«¸ÃÄÚÈİ¸üĞÂµ½CListCtrlÖĞ
+            m_item_edit.GetWindowText(str);	//å–å¾—ç¼–è¾‘æ¡†çš„å†…å®¹
+            SetItemText(m_edit_row, CLC_NAME, str);	//å°†è¯¥å†…å®¹æ›´æ–°åˆ°CListCtrlä¸­
             m_colors[m_edit_row].name = str;
         }
-        m_item_edit.ShowWindow(SW_HIDE);//Òş²Ø±à¼­¿ò
+        m_item_edit.ShowWindow(SW_HIDE);//éšè—ç¼–è¾‘æ¡†
         m_editing = false;
     }
 }
@@ -220,7 +220,7 @@ void CColorListCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = CDRF_DODEFAULT;
     LPNMLVCUSTOMDRAW lplvdr = reinterpret_cast<LPNMLVCUSTOMDRAW>(pNMHDR);
     NMCUSTOMDRAW& nmcd = lplvdr->nmcd;
-    switch (lplvdr->nmcd.dwDrawStage)	//ÅĞ¶Ï×´Ì¬
+    switch (lplvdr->nmcd.dwDrawStage)	//åˆ¤æ–­çŠ¶æ€
     {
     case CDDS_PREPAINT:
         *pResult = CDRF_NOTIFYITEMDRAW;
@@ -228,15 +228,15 @@ void CColorListCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
     case CDDS_ITEMPREPAINT:
         if (nmcd.dwItemSpec >= 0 && nmcd.dwItemSpec < m_colors.size())
         {
-            CDC* pDC = CDC::FromHandle(nmcd.hdc);		//»ñÈ¡»æÍ¼DC
+            CDC* pDC = CDC::FromHandle(nmcd.hdc);		//è·å–ç»˜å›¾DC
             CRect item_rect, draw_rect;
-            GetSubItemRect(nmcd.dwItemSpec, m_draw_color_row, LVIR_BOUNDS, item_rect);	//»ñÈ¡»æÍ¼µ¥Ôª¸ñµÄ¾ØĞÎÇøÓò
-            CCommon::SetDrawRect(pDC, item_rect);		//ÉèÖÃ»æÍ¼ÇøÓòÎªµ±Ç°ÁĞ
+            GetSubItemRect(nmcd.dwItemSpec, m_draw_color_row, LVIR_BOUNDS, item_rect);	//è·å–ç»˜å›¾å•å…ƒæ ¼çš„çŸ©å½¢åŒºåŸŸ
+            CCommon::SetDrawRect(pDC, item_rect);		//è®¾ç½®ç»˜å›¾åŒºåŸŸä¸ºå½“å‰åˆ—
             draw_rect = item_rect;
             draw_rect.DeflateRect(item_rect.Height() / 6, item_rect.Height() / 6);
             pDC->FillSolidRect(draw_rect, m_colors[nmcd.dwItemSpec].color);
 
-            //µ±Ç°ÁĞ»æÖÆÍê³Éºó½«»æÍ¼ÇøÓòÉèÖÃÎª×ó±ßµÄÇøÓò£¬·ÀÖ¹µ±Ç°ÁĞµÄÇøÓò±»¸²¸Ç
+            //å½“å‰åˆ—ç»˜åˆ¶å®Œæˆåå°†ç»˜å›¾åŒºåŸŸè®¾ç½®ä¸ºå·¦è¾¹çš„åŒºåŸŸï¼Œé˜²æ­¢å½“å‰åˆ—çš„åŒºåŸŸè¢«è¦†ç›–
             CRect rect1{ item_rect };
             rect1.left = 0;
             rect1.right = item_rect.left;
@@ -250,7 +250,7 @@ void CColorListCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CColorListCtrl::PreSubclassWindow()
 {
-    // TODO: ÔÚ´ËÌí¼Ó×¨ÓÃ´úÂëºÍ/»òµ÷ÓÃ»ùÀà
+    // TODO: åœ¨æ­¤æ·»åŠ ä¸“ç”¨ä»£ç å’Œ/æˆ–è°ƒç”¨åŸºç±»
     SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EDITLABELS);
 
     int width0, width1;
@@ -259,8 +259,8 @@ void CColorListCtrl::PreSubclassWindow()
     width0 = rect.Width() * 4 / 7;
     width1 = rect.Width() - width0 - theApp.DPI(21);
 
-    InsertColumn(CLC_NAME, CCommon::LoadText(IDS_NAME), LVCFMT_LEFT, width0);		//²åÈëµÚ1ÁĞ
-    InsertColumn(CLC_COLOR, CCommon::LoadText(IDS_COLOR), LVCFMT_LEFT, width1);		//²åÈëµÚ2ÁĞ
+    InsertColumn(CLC_NAME, CCommon::LoadText(IDS_NAME), LVCFMT_LEFT, width0);		//æ’å…¥ç¬¬1åˆ—
+    InsertColumn(CLC_COLOR, CCommon::LoadText(IDS_COLOR), LVCFMT_LEFT, width1);		//æ’å…¥ç¬¬2åˆ—
 
     m_item_edit.Create(WS_BORDER | ES_AUTOHSCROLL, CRect(), this, IDC_ITEM_EDITBOX);
     m_item_edit.SetFont(GetFont());
@@ -270,7 +270,7 @@ void CColorListCtrl::PreSubclassWindow()
 
 void CColorListCtrl::OnEnKillfocusEdit1()
 {
-    //µ±ÎÄ±¾±à¼­¿Ø¼ş¿Ø¼şÊ§È¥½¹µãÊ±ÏìÓ¦
+    //å½“æ–‡æœ¬ç¼–è¾‘æ§ä»¶æ§ä»¶å¤±å»ç„¦ç‚¹æ—¶å“åº”
     EndEdit();
 }
 
@@ -278,9 +278,9 @@ void CColorListCtrl::OnEnKillfocusEdit1()
 void CColorListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 
-    //Ë«»÷µÚÒ»ÁĞÊ±±à¼­Ãû³Æ
+    //åŒå‡»ç¬¬ä¸€åˆ—æ—¶ç¼–è¾‘åç§°
     if(pNMItemActivate->iSubItem == CLC_NAME)
         Edit(pNMItemActivate->iItem);
 
@@ -298,10 +298,10 @@ void CColorListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CColorListCtrl::OnLvnBeginScroll(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    // ´Ë¹¦ÄÜÒªÇó Internet Explorer 5.5 »ò¸ü¸ß°æ±¾¡£
-    // ·ûºÅ _WIN32_IE ±ØĞëÊÇ >= 0x0560¡£
+    // æ­¤åŠŸèƒ½è¦æ±‚ Internet Explorer 5.5 æˆ–æ›´é«˜ç‰ˆæœ¬ã€‚
+    // ç¬¦å· _WIN32_IE å¿…é¡»æ˜¯ >= 0x0560ã€‚
     LPNMLVSCROLL pStateChanged = reinterpret_cast<LPNMLVSCROLL>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     EndEdit();
 
     *pResult = 0;

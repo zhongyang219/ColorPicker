@@ -9,6 +9,10 @@
 #include "ColorConvert.h"
 #include "IniHelper.h"
 
+#ifdef _WINDLL
+#include "../include/mainframeinterface.h"
+#endif
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -158,6 +162,7 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
     ON_STN_DBLCLK(IDC_COLOR_NEW_STATIC, &CColorPickerDlg::OnStnDblclickColorNewStatic)
     ON_COMMAND(ID_USE_HEX, &CColorPickerDlg::OnUseHex)
     ON_WM_WINDOWPOSCHANGING()
+    ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -231,6 +236,8 @@ void CColorPickerDlg::SaveConfig() const
 	ini.WriteInt(_T("Config"), _T("width"), m_window_size.cx);
 	ini.WriteInt(_T("Config"), _T("height"), m_window_size.cy);
 	ini.Save();
+
+    m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//退出时将颜色表保存到配置文件
 }
 
 void CColorPickerDlg::LoadConfig()
@@ -260,6 +267,21 @@ CString CColorPickerDlg::GetFormatStr() const
         str_format = _T("%u");
     }
     return str_format;
+}
+
+void CColorPickerDlg::UpdateMainFrameCmdState()
+{
+#ifdef _WINDLL
+    ColorPicker::Instance()->GetMainFrame()->SetItemChecked("UseHex", m_use_hex);
+    ColorPicker::Instance()->GetMainFrame()->SetItemChecked("HexLowerCase", m_hex_lowercase);
+    switch (theApp.m_language)
+    {
+    case Language::ENGLISH: ColorPicker::Instance()->GetMainFrame()->SetItemChecked("LanguageEnglish", true); break;
+    case Language::SIMPLIFIED_CHINESE: ColorPicker::Instance()->GetMainFrame()->SetItemChecked("LanguageSimplifiedChinese", true); break;
+    default: ColorPicker::Instance()->GetMainFrame()->SetItemChecked("LanguageFollowingSystem", true); break;
+    }
+
+#endif
 }
 
 BOOL CColorPickerDlg::OnInitDialog()
@@ -617,8 +639,6 @@ BOOL CColorPickerDlg::PreTranslateMessage(MSG* pMsg)
 void CColorPickerDlg::OnClose()
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//退出时将颜色表保存到配置文件
-	SaveConfig();
 
 	CDialog::OnClose();
 }
@@ -710,6 +730,7 @@ void CColorPickerDlg::OnHexLowerCase()
         SetColorGText();
         SetColorBText();
     }
+    UpdateMainFrameCmdState();
 }
 
 
@@ -819,7 +840,8 @@ void CColorPickerDlg::OnLanguageFollowingSystem()
 		theApp.m_language = Language::FOLLOWING_SYSTEM;
 		theApp.SaveConfig();
 		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
-	}
+        UpdateMainFrameCmdState();
+    }
 }
 
 
@@ -831,7 +853,8 @@ void CColorPickerDlg::OnLanguageEnglish()
 		theApp.m_language = Language::ENGLISH;
 		theApp.SaveConfig();
 		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
-	}
+        UpdateMainFrameCmdState();
+    }
 }
 
 
@@ -843,7 +866,8 @@ void CColorPickerDlg::OnLanguageSimplifiedChinese()
 		theApp.m_language = Language::SIMPLIFIED_CHINESE;
 		theApp.SaveConfig();
 		MessageBox(CCommon::LoadText(IDS_LANGUAGE_CHANGE), NULL, MB_ICONINFORMATION);
-	}
+        UpdateMainFrameCmdState();
+    }
 }
 
 
@@ -862,6 +886,7 @@ void CColorPickerDlg::OnUseHex()
     SetColorRText();
     SetColorGText();
     SetColorBText();
+    UpdateMainFrameCmdState();
 }
 
 
@@ -871,4 +896,12 @@ void CColorPickerDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
     if (!m_windowVisible)
         lpwndpos->flags &= ~SWP_SHOWWINDOW;
+}
+
+
+void CColorPickerDlg::OnDestroy()
+{
+    SaveConfig();
+
+    CDialog::OnDestroy();
 }

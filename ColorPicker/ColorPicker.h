@@ -56,6 +56,8 @@ extern CColorPickerApp theApp;
 class ColorPicker : public IModule
 {
 public:
+    static ColorPicker* Instance();
+    IMainFrame* GetMainFrame() const;
 
     // 通过 IModule 继承
     virtual void InitInstance() override;
@@ -65,6 +67,9 @@ public:
     virtual eMainWindowType GetMainWindowType() const override;
     virtual const char* GetModuleName() override;
     virtual void OnCommand(const char* strCmd, bool checked) override;
+
+private:
+    IMainFrame* m_pMainFrame;
 };
 #ifdef __cplusplus
 extern "C" {
