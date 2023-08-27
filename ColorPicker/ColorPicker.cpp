@@ -279,6 +279,7 @@ if (cmd == cmdString) \
 
 void ColorPicker::OnCommand(const char* strCmd, bool checked)
 {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
     std::string cmd = strCmd;
     DECLARE_COMMAND_TRIGGER("UseHex", ID_USE_HEX)
     DECLARE_COMMAND_TRIGGER("HexLowerCase", ID_HEX_LOWER_CASE)
