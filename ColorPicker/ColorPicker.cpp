@@ -289,6 +289,9 @@ void ColorPicker::OnCommand(const char* strCmd, bool checked)
     DECLARE_COMMAND_TRIGGER("SelectThemeColor", ID_SELECT_THEME_COLOR)
     DECLARE_COMMAND_TRIGGER("AddGetSysColorTable", ID_ADD_GET_SYS_COLOR_TABLE)
     DECLARE_COMMAND_TRIGGER("ColorPickerAppAbout", ID_APP_ABOUT)
+    DECLARE_COMMAND_TRIGGER("PickColor", ID_PICK_COLOR)
+    DECLARE_COMMAND_TRIGGER("CopyRgbValue", ID_COPY_RGB_VALUE)
+    DECLARE_COMMAND_TRIGGER("CopyGexValue", ID_COPY_HEX_VALUE)
 }
 
 IModule* CreateInstance()

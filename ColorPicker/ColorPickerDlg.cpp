@@ -163,6 +163,9 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
     ON_COMMAND(ID_USE_HEX, &CColorPickerDlg::OnUseHex)
     ON_WM_WINDOWPOSCHANGING()
     ON_WM_DESTROY()
+    ON_COMMAND(ID_PICK_COLOR, &CColorPickerDlg::OnPickColor)
+    ON_COMMAND(ID_COPY_RGB_VALUE, &CColorPickerDlg::OnCopyRgbValue)
+    ON_COMMAND(ID_COPY_HEX_VALUE, &CColorPickerDlg::OnCopyHexValue)
 END_MESSAGE_MAP()
 
 
@@ -543,6 +546,8 @@ void CColorPickerDlg::OnEnChangeColorHex()
 	{ 
 		CString str;
 		m_edit_hex.GetWindowText(str);
+        if (!str.IsEmpty() && str[0] == '#')
+            str = str.Mid(1);
 		m_color_hex = wcstoul(str, NULL, 16);
 		m_color_r = CColorConvert::Hex2R(m_color_hex);
 		m_color_g = CColorConvert::Hex2G(m_color_hex);
@@ -914,4 +919,22 @@ void CColorPickerDlg::OnDestroy()
     SaveConfig();
 
     CDialog::OnDestroy();
+}
+
+
+void CColorPickerDlg::OnPickColor()
+{
+    m_pColorDlg->OnColorSelect();
+}
+
+
+void CColorPickerDlg::OnCopyRgbValue()
+{
+    OnBnClickedCopyRgbButton();
+}
+
+
+void CColorPickerDlg::OnCopyHexValue()
+{
+    OnBnClickedCopyHexButton();
 }

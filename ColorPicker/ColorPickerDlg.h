@@ -127,4 +127,7 @@ public:
     afx_msg void OnUseHex();
     afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
     afx_msg void OnDestroy();
+    afx_msg void OnPickColor();
+    afx_msg void OnCopyRgbValue();
+    afx_msg void OnCopyHexValue();
 };
