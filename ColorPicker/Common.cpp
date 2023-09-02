@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Common.h"
 #include <dwmapi.h>
 
@@ -42,18 +42,18 @@ void CCommon::StringNormalize(std::wstring & str)
 {
 	if (str.empty()) return;
 
-	int size = str.size();	//×Ö·û´®µÄ³¤¶È
+	int size = str.size();	//å­—ç¬¦ä¸²çš„é•¿åº¦
 	if (size < 0) return;
 
-	int index1 = 0;		//×Ö·û´®ÖĞµÚ1¸ö²»ÊÇ¿Õ¸ñ»ò¿ØÖÆ×Ö·ûµÄÎ»ÖÃ
-	int index2 = size - 1;	//×Ö·û´®ÖĞ×îºóÒ»¸ö²»ÊÇ¿Õ¸ñ»ò¿ØÖÆ×Ö·ûµÄÎ»ÖÃ
+	int index1 = 0;		//å­—ç¬¦ä¸²ä¸­ç¬¬1ä¸ªä¸æ˜¯ç©ºæ ¼æˆ–æ§åˆ¶å­—ç¬¦çš„ä½ç½®
+	int index2 = size - 1;	//å­—ç¬¦ä¸²ä¸­æœ€åä¸€ä¸ªä¸æ˜¯ç©ºæ ¼æˆ–æ§åˆ¶å­—ç¬¦çš„ä½ç½®
 	while (index1 < size && str[index1] >= 0 && str[index1] <= 32)
 		index1++;
 	while (index2 >= 0 && str[index2] >= 0 && str[index2] <= 32)
 		index2--;
-	if (index1 > index2)	//Èç¹ûindex1 > index2£¬ËµÃ÷×Ö·û´®È«ÊÇ¿Õ¸ñ»ò¿ØÖÆ×Ö·û
+	if (index1 > index2)	//å¦‚æœindex1 > index2ï¼Œè¯´æ˜å­—ç¬¦ä¸²å…¨æ˜¯ç©ºæ ¼æˆ–æ§åˆ¶å­—ç¬¦
 		str.clear();
-	else if (index1 == 0 && index2 == size - 1)	//Èç¹ûindex1ºÍindex2µÄÖµ·Ö±ğÎª0ºÍsize - 1£¬ËµÃ÷×Ö·û´®Ç°ºóÃ»ÓĞ¿Õ¸ñ»ò¿ØÖÆ×Ö·û£¬Ö±½Ó·µ»Ø
+	else if (index1 == 0 && index2 == size - 1)	//å¦‚æœindex1å’Œindex2çš„å€¼åˆ†åˆ«ä¸º0å’Œsize - 1ï¼Œè¯´æ˜å­—ç¬¦ä¸²å‰åæ²¡æœ‰ç©ºæ ¼æˆ–æ§åˆ¶å­—ç¬¦ï¼Œç›´æ¥è¿”å›
 		return;
 	else
 		str = str.substr(index1, index2 - index1 + 1);
@@ -83,6 +83,23 @@ bool CCommon::CopyStringToClipboard(const std::wstring & str)
 		return true;
 	}
 	else return false;
+}
+
+std::wstring CCommon::GetClipboardString()
+{
+    std::wstring clipboardString;
+    if (OpenClipboard(NULL))
+    {
+        HGLOBAL hClip = GetClipboardData(CF_UNICODETEXT);
+        if (hClip)
+        {
+            const wchar_t* pBuff = (const wchar_t*)GlobalLock(hClip);
+            GlobalUnlock(hClip);
+            clipboardString = pBuff;
+        }
+        CloseClipboard();
+    }
+    return clipboardString;
 }
 
 COLORREF CCommon::GetWindowsThemeColor()
@@ -147,7 +164,7 @@ CString CCommon::LoadTextFormat(UINT id, const std::initializer_list<CVariant>& 
 
 unsigned int CCommon::StringToNumber(const CString& str)
 {
-    //ÅĞ¶Ï½øÖÆ
+    //åˆ¤æ–­è¿›åˆ¶
     int radix{ 10 };
     if (str.GetLength() >= 3 && str[0] == _T('0') && (str[1] == _T('x') || str[1] == _T('X')))
     {
@@ -159,4 +176,43 @@ unsigned int CCommon::StringToNumber(const CString& str)
     }
     TCHAR* end_ptr{};
     return _tcstoul(str.GetString(), &end_ptr, radix);
+}
+
+void CCommon::StringSplit(const std::wstring& str, wchar_t div_ch, std::vector<std::wstring>& results, bool skip_empty, bool trim)
+{
+    results.clear();
+    size_t split_index = -1;
+    size_t last_split_index = -1;
+    while (true)
+    {
+        split_index = str.find(div_ch, split_index + 1);
+        std::wstring split_str = str.substr(last_split_index + 1, split_index - last_split_index - 1);
+        if (trim)
+            StringNormalize(split_str);
+        if (!split_str.empty() || !skip_empty)
+            results.push_back(split_str);
+        if (split_index == std::wstring::npos)
+            break;
+        last_split_index = split_index;
+    }
+}
+
+bool CCommon::IsCharHex(char ch)
+{
+    return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+}
+
+bool CCommon::IsStringHex(std::wstring& strHex)
+{
+    StringNormalize(strHex);
+    if (strHex.empty())
+        return false;
+    if (strHex[0] == L'#')
+        strHex = strHex.substr(1);
+    for (auto& ch : strHex)
+    {
+        if (!IsCharHex(ch))
+            return false;
+    }
+    return true;
 }

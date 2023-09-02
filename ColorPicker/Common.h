@@ -1,12 +1,14 @@
-#pragma once
+ï»¿#pragma once
 #include "CVariant.h"
+#include <vector>
+#include <string>
 
-//ÓïÑÔ
+//è¯­è¨€
 enum class Language
 {
-	FOLLOWING_SYSTEM,		//¸úËæÏµÍ³
-	ENGLISH,				//Ó¢Óï
-	SIMPLIFIED_CHINESE		//¼òÌåÖĞÎÄ
+	FOLLOWING_SYSTEM,		//è·Ÿéšç³»ç»Ÿ
+	ENGLISH,				//è‹±è¯­
+	SIMPLIFIED_CHINESE		//ç®€ä½“ä¸­æ–‡
 };
 
 class CCommon
@@ -15,7 +17,7 @@ public:
 	CCommon();
 	~CCommon();
 
-	//½«const char*×Ö·û´®×ª»»³É¿í×Ö·û×Ö·û´®
+	//å°†const char*å­—ç¬¦ä¸²è½¬æ¢æˆå®½å­—ç¬¦å­—ç¬¦ä¸²
 	static std::wstring StrToUnicode(const char* str, bool utf8 = false);
 
 	static std::string UnicodeToStr(const wchar_t* wstr, bool utf8 = false);
@@ -24,23 +26,35 @@ public:
 
 	static void SetDrawRect(CDC* pDC, CRect rect);
 
-	//½«Ò»¸ö×Ö·û´®±£´æµ½¼ôÌù°å
+	//å°†ä¸€ä¸ªå­—ç¬¦ä¸²ä¿å­˜åˆ°å‰ªè´´æ¿
 	static bool CopyStringToClipboard(const std::wstring& str);
+
+    //è¯»å–å‰ªè´´æ¿ä¸­çš„å­—ç¬¦ä¸²
+    static std::wstring GetClipboardString();
 
     static COLORREF GetWindowsThemeColor();
 
-	//´Ó×ÊÔ´ÎÄ¼şÔØÈë×Ö·û´®¡£ÆäÖĞ£¬front_str¡¢back_strÎªÔØÈë×Ö·û´®Ê±ĞèÒªÔÚÇ°Ãæ»òºóÃæÌí¼ÓµÄ×Ö·û´®
+	//ä»èµ„æºæ–‡ä»¶è½½å…¥å­—ç¬¦ä¸²ã€‚å…¶ä¸­ï¼Œfront_strã€back_strä¸ºè½½å…¥å­—ç¬¦ä¸²æ—¶éœ€è¦åœ¨å‰é¢æˆ–åé¢æ·»åŠ çš„å­—ç¬¦ä¸²
 	static CString LoadText(UINT id, LPCTSTR back_str = nullptr);
 	static CString LoadText(LPCTSTR front_str, UINT id, LPCTSTR back_str = nullptr);
 
-	//°²È«µÄ¸ñÊ½»¯×Ö·û´®£¬½«format_strÖĞĞÎÈç<%ĞòºÅ%>µÄ×Ö·û´®Ìæ»»³É³õÊ¼»¯ÁĞ±íparasÖĞµÄÔªËØ£¬ÔªËØÖ§³Öint/double/LPCTSTR/CString¸ñÊ½£¬ĞòºÅ´Ó1¿ªÊ¼
+	//å®‰å…¨çš„æ ¼å¼åŒ–å­—ç¬¦ä¸²ï¼Œå°†format_strä¸­å½¢å¦‚<%åºå·%>çš„å­—ç¬¦ä¸²æ›¿æ¢æˆåˆå§‹åŒ–åˆ—è¡¨parasä¸­çš„å…ƒç´ ï¼Œå…ƒç´ æ”¯æŒint/double/LPCTSTR/CStringæ ¼å¼ï¼Œåºå·ä»1å¼€å§‹
 	static CString StringFormat(LPCTSTR format_str, const std::initializer_list<CVariant>& paras);
 
-	//´Ó×ÊÔ´ÎÄ¼şÖĞÔØÈë×Ö·û´®£¬²¢½«×ÊÔ´×Ö·û´®ÖĞĞÎÈç<%ĞòºÅ%>µÄ×Ö·û´®Ìæ»»³É¿É±ä²ÎÊıÁĞ±íÖĞµÄ²ÎÊı
+	//ä»èµ„æºæ–‡ä»¶ä¸­è½½å…¥å­—ç¬¦ä¸²ï¼Œå¹¶å°†èµ„æºå­—ç¬¦ä¸²ä¸­å½¢å¦‚<%åºå·%>çš„å­—ç¬¦ä¸²æ›¿æ¢æˆå¯å˜å‚æ•°åˆ—è¡¨ä¸­çš„å‚æ•°
 	static CString LoadTextFormat(UINT id, const std::initializer_list<CVariant>& paras);
 
-    //½«×Ö·û´®×ª»»³ÉÊı×Ö£¬Ö§³Ö×Ô¶¯Ê¶±ğÊ®Áù½øÖÆ¡¢°Ë½øÖÆºÍÊ®½øÖÆ
+    //å°†å­—ç¬¦ä¸²è½¬æ¢æˆæ•°å­—ï¼Œæ”¯æŒè‡ªåŠ¨è¯†åˆ«åå…­è¿›åˆ¶ã€å…«è¿›åˆ¶å’Œåè¿›åˆ¶
     static unsigned int StringToNumber(const CString& str);
 
+    //å°†ä¸€ä¸ªå­—ç¬¦ä¸²åˆ†å‰²æˆè‹¥å¹²ä¸ªå­—ç¬¦ä¸²
+    //str: åŸå§‹å­—ç¬¦ä¸²
+    //div_ch: ç”¨äºåˆ†å‰²çš„å­—ç¬¦
+    //result: æ¥æ”¶åˆ†å‰²åçš„ç»“æœ
+    static void StringSplit(const std::wstring& str, wchar_t div_ch, std::vector<std::wstring>& results, bool skip_empty = true, bool trim = true);
+
+    static bool IsCharHex(char ch);
+
+    static bool IsStringHex(std::wstring& strHex);
 };
 

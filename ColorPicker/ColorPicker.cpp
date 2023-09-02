@@ -292,6 +292,8 @@ void ColorPicker::OnCommand(const char* strCmd, bool checked)
     DECLARE_COMMAND_TRIGGER("PickColor", ID_PICK_COLOR)
     DECLARE_COMMAND_TRIGGER("CopyRgbValue", ID_COPY_RGB_VALUE)
     DECLARE_COMMAND_TRIGGER("CopyGexValue", ID_COPY_HEX_VALUE)
+    DECLARE_COMMAND_TRIGGER("PasteRgbValue", ID_PASTE_RGB_VALUE)
+    DECLARE_COMMAND_TRIGGER("PasteHexValue", ID_PASTE_HEX_VALUE)
 }
 
 IModule* CreateInstance()

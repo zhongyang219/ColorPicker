@@ -130,4 +130,6 @@ public:
     afx_msg void OnPickColor();
     afx_msg void OnCopyRgbValue();
     afx_msg void OnCopyHexValue();
+    afx_msg void OnPasteRgbValue();
+    afx_msg void OnPasteHexValue();
 };

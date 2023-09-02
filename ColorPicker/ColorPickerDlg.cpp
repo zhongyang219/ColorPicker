@@ -166,6 +166,8 @@ BEGIN_MESSAGE_MAP(CColorPickerDlg, CDialog)
     ON_COMMAND(ID_PICK_COLOR, &CColorPickerDlg::OnPickColor)
     ON_COMMAND(ID_COPY_RGB_VALUE, &CColorPickerDlg::OnCopyRgbValue)
     ON_COMMAND(ID_COPY_HEX_VALUE, &CColorPickerDlg::OnCopyHexValue)
+    ON_COMMAND(ID_PASTE_RGB_VALUE, &CColorPickerDlg::OnPasteRgbValue)
+    ON_COMMAND(ID_PASTE_HEX_VALUE, &CColorPickerDlg::OnPasteHexValue)
 END_MESSAGE_MAP()
 
 
@@ -941,4 +943,56 @@ void CColorPickerDlg::OnCopyRgbValue()
 void CColorPickerDlg::OnCopyHexValue()
 {
     OnBnClickedCopyHexButton();
+}
+
+
+void CColorPickerDlg::OnPasteRgbValue()
+{
+    std::wstring rgbValue = CCommon::GetClipboardString();
+    std::vector<std::wstring> splitRes;
+    CCommon::StringSplit(rgbValue, L',', splitRes);
+    if (splitRes.size() >= 3)
+    {
+        m_color_r = static_cast<unsigned char>(_wtoi(splitRes[0].c_str()));
+        m_color_g = static_cast<unsigned char>(_wtoi(splitRes[1].c_str()));
+        m_color_b = static_cast<unsigned char>(_wtoi(splitRes[2].c_str()));
+        m_color = RGB(m_color_r, m_color_g, m_color_b);
+        m_color_hex = CColorConvert::RGB2Hex(m_color_r, m_color_g, m_color_b);
+        SetColorRText();
+        SetColorGText();
+        SetColorBText();
+        SetColorRefText();
+        SetColorHexText();
+        SetPreview();
+        ShowMessage(CCommon::LoadText(IDS_RGB_VALUE_PASTED_INFO));
+    }
+    else
+    {
+        ShowMessage(CCommon::LoadText(IDS_RGB_VALUE_PASTED_ERROR));
+    }
+}
+
+
+void CColorPickerDlg::OnPasteHexValue()
+{
+    std::wstring hexValue = CCommon::GetClipboardString();
+    if (CCommon::IsStringHex(hexValue))
+    {
+        m_color_hex = wcstol(hexValue.c_str(), nullptr, 16);
+        m_color_r = CColorConvert::Hex2R(m_color_hex);
+        m_color_g = CColorConvert::Hex2G(m_color_hex);
+        m_color_b = CColorConvert::Hex2B(m_color_hex);
+        m_color = RGB(m_color_r, m_color_g, m_color_b);
+        SetColorRefText();
+        SetColorHexText();
+        SetColorRText();
+        SetColorGText();
+        SetColorBText();
+        SetPreview();
+        ShowMessage(CCommon::LoadText(IDS_HEX_VALUE_PASTED_INFO));
+    }
+    else
+    {
+        ShowMessage(CCommon::LoadText(IDS_HEX_VALUE_PASTED_ERROR));
+    }
 }
