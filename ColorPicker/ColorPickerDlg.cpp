@@ -238,6 +238,7 @@ void CColorPickerDlg::SaveConfig() const
 	//保存窗口大小设置
 	ini.WriteInt(_T("Config"), _T("width"), m_window_size.cx);
 	ini.WriteInt(_T("Config"), _T("height"), m_window_size.cy);
+    ini.WriteBool(_T("Config"), _T("copy_width_hex_sign"), IsDlgButtonChecked(IDC_COPY_WIDTH_HEX_SIGN_CHECK) != FALSE);
 	ini.Save();
 
     m_color_list.SaveColors((theApp.GetModleDir() + CONFIG_FILE_NAME).c_str());		//退出时将颜色表保存到配置文件
@@ -252,6 +253,7 @@ void CColorPickerDlg::LoadConfig()
 	//载入窗口大小设置
 	m_window_size.cx = ini.GetInt(_T("Config"), _T("width"), -1);
 	m_window_size.cy = ini.GetInt(_T("Config"), _T("height"), -1);
+    CheckDlgButton(IDC_COPY_WIDTH_HEX_SIGN_CHECK, ini.GetBool(_T("Config"), _T("copy_width_hex_sign"), false));
 }
 
 
@@ -691,6 +693,8 @@ void CColorPickerDlg::OnBnClickedCopyHexButton()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str;
 	m_edit_hex.GetWindowText(str);
+    if (IsDlgButtonChecked(IDC_COPY_WIDTH_HEX_SIGN_CHECK))
+        str = _T('#') + str;
 	CCommon::CopyStringToClipboard(wstring(str.GetString()));
     ShowMessage(CCommon::LoadText(IDS_HEX_VALUE_COPYED_INFO));
 }
